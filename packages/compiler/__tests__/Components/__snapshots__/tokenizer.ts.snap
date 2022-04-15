@@ -1,0 +1,675 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tokenize function block call 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "add",
+  },
+  Object {
+    "source": Object {
+      "col": 3,
+      "line": 0,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 4,
+      "line": 0,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 5,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 7,
+      "line": 0,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 8,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 10,
+      "line": 0,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 11,
+      "line": 0,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 13,
+      "line": 0,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 22,
+      "line": 1,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 23,
+      "line": 1,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 24,
+      "line": 1,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 19,
+      "line": 2,
+    },
+    "value": "}",
+  },
+]
+`;
+
+exports[`tokenize function call 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "add",
+  },
+  Object {
+    "source": Object {
+      "col": 3,
+      "line": 0,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 4,
+      "line": 0,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 5,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 7,
+      "line": 0,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 8,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 10,
+      "line": 0,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 11,
+      "line": 0,
+    },
+    "value": ")",
+  },
+]
+`;
+
+exports[`tokenize removes whitespace 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "int",
+  },
+  Object {
+    "source": Object {
+      "col": 4,
+      "line": 0,
+    },
+    "value": "i",
+  },
+  Object {
+    "source": Object {
+      "col": 12,
+      "line": 0,
+    },
+    "value": "=",
+  },
+  Object {
+    "source": Object {
+      "col": 1,
+      "line": 1,
+    },
+    "value": "0",
+  },
+]
+`;
+
+exports[`tokenize tokenize single variable 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "int",
+  },
+  Object {
+    "source": Object {
+      "col": 4,
+      "line": 0,
+    },
+    "value": "i",
+  },
+  Object {
+    "source": Object {
+      "col": 5,
+      "line": 0,
+    },
+    "value": "=",
+  },
+  Object {
+    "source": Object {
+      "col": 6,
+      "line": 0,
+    },
+    "value": "0",
+  },
+]
+`;
+
+exports[`tokenize work with a single token 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "int",
+  },
+]
+`;
+
+exports[`tokenize work with long list of tokens 1`] = `
+Array [
+  Object {
+    "source": Object {
+      "col": 0,
+      "line": 0,
+    },
+    "value": "add",
+  },
+  Object {
+    "source": Object {
+      "col": 3,
+      "line": 0,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 4,
+      "line": 0,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 5,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 7,
+      "line": 0,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 8,
+      "line": 0,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 10,
+      "line": 0,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 11,
+      "line": 0,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 13,
+      "line": 0,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 22,
+      "line": 1,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 23,
+      "line": 1,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 24,
+      "line": 1,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 22,
+      "line": 2,
+    },
+    "value": "d",
+  },
+  Object {
+    "source": Object {
+      "col": 23,
+      "line": 2,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 24,
+      "line": 2,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 22,
+      "line": 3,
+    },
+    "value": "while",
+  },
+  Object {
+    "source": Object {
+      "col": 27,
+      "line": 3,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 28,
+      "line": 3,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 29,
+      "line": 3,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 30,
+      "line": 3,
+    },
+    "value": "v",
+  },
+  Object {
+    "source": Object {
+      "col": 31,
+      "line": 3,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 32,
+      "line": 3,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 33,
+      "line": 3,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 35,
+      "line": 3,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 24,
+      "line": 4,
+    },
+    "value": "while",
+  },
+  Object {
+    "source": Object {
+      "col": 29,
+      "line": 4,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 30,
+      "line": 4,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 31,
+      "line": 4,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 32,
+      "line": 4,
+    },
+    "value": "v",
+  },
+  Object {
+    "source": Object {
+      "col": 33,
+      "line": 4,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 34,
+      "line": 4,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 35,
+      "line": 4,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 37,
+      "line": 4,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 26,
+      "line": 5,
+    },
+    "value": "while",
+  },
+  Object {
+    "source": Object {
+      "col": 31,
+      "line": 5,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 32,
+      "line": 5,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 33,
+      "line": 5,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 34,
+      "line": 5,
+    },
+    "value": "v",
+  },
+  Object {
+    "source": Object {
+      "col": 35,
+      "line": 5,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 36,
+      "line": 5,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 37,
+      "line": 5,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 39,
+      "line": 5,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 28,
+      "line": 6,
+    },
+    "value": "while",
+  },
+  Object {
+    "source": Object {
+      "col": 33,
+      "line": 6,
+    },
+    "value": "(",
+  },
+  Object {
+    "source": Object {
+      "col": 34,
+      "line": 6,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 35,
+      "line": 6,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 36,
+      "line": 6,
+    },
+    "value": "v",
+  },
+  Object {
+    "source": Object {
+      "col": 37,
+      "line": 6,
+    },
+    "value": ",",
+  },
+  Object {
+    "source": Object {
+      "col": 38,
+      "line": 6,
+    },
+    "value": "c",
+  },
+  Object {
+    "source": Object {
+      "col": 39,
+      "line": 6,
+    },
+    "value": ")",
+  },
+  Object {
+    "source": Object {
+      "col": 41,
+      "line": 6,
+    },
+    "value": "{",
+  },
+  Object {
+    "source": Object {
+      "col": 30,
+      "line": 7,
+    },
+    "value": "hans",
+  },
+  Object {
+    "source": Object {
+      "col": 35,
+      "line": 7,
+    },
+    "value": "=",
+  },
+  Object {
+    "source": Object {
+      "col": 37,
+      "line": 7,
+    },
+    "value": "a",
+  },
+  Object {
+    "source": Object {
+      "col": 30,
+      "line": 8,
+    },
+    "value": "b",
+  },
+  Object {
+    "source": Object {
+      "col": 31,
+      "line": 8,
+    },
+    "value": "=",
+  },
+  Object {
+    "source": Object {
+      "col": 33,
+      "line": 8,
+    },
+    "value": "1",
+  },
+  Object {
+    "source": Object {
+      "col": 28,
+      "line": 9,
+    },
+    "value": "}",
+  },
+  Object {
+    "source": Object {
+      "col": 26,
+      "line": 10,
+    },
+    "value": "}",
+  },
+  Object {
+    "source": Object {
+      "col": 24,
+      "line": 11,
+    },
+    "value": "}",
+  },
+  Object {
+    "source": Object {
+      "col": 22,
+      "line": 12,
+    },
+    "value": "}",
+  },
+  Object {
+    "source": Object {
+      "col": 19,
+      "line": 13,
+    },
+    "value": "}",
+  },
+]
+`;
