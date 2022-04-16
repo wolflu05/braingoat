@@ -3,7 +3,7 @@ import { DataTypes } from "../DataTypes";
 import { Int } from "../DataTypes/Int";
 import { Functions } from "../Functions";
 import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
-import { COMMANDS } from "../utils/commands";
+import { COMMANDS, VALID_CHARS } from "../utils/commands";
 import { AST, DECLARATION_OPTIONS, FUNCTION_CALL_OPTIONS, TOKEN_TYPES } from "./AST";
 import { LineType, TokenType } from "./Tokenizer";
 
@@ -59,10 +59,12 @@ export class Emitter {
   }
 
   getNextNEmpty(length: number): memoryPositionType {
-    let pos = this.memoryAllocation.findIndex((_, i, l) => {
-      if (!l[i + 1]) return true;
-      return l[i + 1].position[0] - l[i].position[1] - 1 >= length;
-    });
+    let pos = this.memoryAllocation
+      .sort((a, b) => a.position[0] - b.position[0])
+      .findIndex((_, i, l) => {
+        if (!l[i + 1]) return true;
+        return l[i + 1].position[0] - l[i].position[1] - 1 >= length;
+      });
 
     if (pos === -1) {
       pos = 0;
@@ -122,6 +124,10 @@ export class Emitter {
   }
 
   addCode(...code: string[]) {
-    this.code += code.join("");
+    this.code += code
+      .join("")
+      .split("")
+      .filter((x) => VALID_CHARS.includes(x))
+      .join("");
   }
 }

@@ -62,6 +62,11 @@ export class AST {
         }
 
         const params = tokens.slice(i + 2, endTokenIndex);
+        const wrongIdx = params.findIndex((v, i) => ((i + 1) % 2 === 0 ? v.value !== "," : false));
+
+        if (wrongIdx !== -1) {
+          braingoat.throwError(ErrorType.SyntaxError, `Expected ,`, params[wrongIdx]);
+        }
 
         // check for block function
         let block: TokenType[] = [];
@@ -93,7 +98,7 @@ export class AST {
             TOKEN_TYPES.FUNCTION_CALL,
             {
               functionName: tokens[i].value,
-              parameters: params,
+              parameters: params.filter((x) => x.value !== ","),
               block: AST.parse(block.slice(1), braingoat),
             },
             tokens[i].source,

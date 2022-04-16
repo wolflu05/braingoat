@@ -9,23 +9,12 @@ export class Int extends BasicDataType {
   constructor(emitter: Emitter, name: string | null, value: string, source: LineType, addToMemory = false) {
     super(emitter, name, source);
 
-    this.position = emitter.getNextNEmpty(1);
+    this.position = this.emitter.getNextNEmpty(1);
+
     if (addToMemory) this.emitter.memoryAllocation.push(this);
 
-    this.set(value, false);
-  }
-
-  set(variable: IntCast, reset = true) {
-    const castedVar = this.cast(variable);
-
-    if (reset) this.reset();
-
-    if (castedVar instanceof Int) {
-      const tmp = castedVar.clone();
-      this.emitter.codeBuilder`${tmp}[${this}+${tmp}-]`;
-      tmp.destroy();
-    } else {
-      this.emitter.codeBuilder`${this}${"+".repeat(variable as number)}`;
+    if (!Number.isNaN(+value) && value !== "0") {
+      this.set(value, false);
     }
   }
 
@@ -82,5 +71,93 @@ export class Int extends BasicDataType {
     if (idx !== -1) {
       this.emitter.memoryAllocation.splice(idx, 1);
     }
+  }
+
+  set(variable: IntCast, reset = true) {
+    const castedVar = this.cast(variable);
+
+    if (reset) this.reset();
+
+    if (castedVar instanceof Int) {
+      const tmp = castedVar.clone();
+      this.emitter.codeBuilder`${tmp}[${this}+${tmp}-]`;
+      tmp.destroy();
+    } else {
+      this.emitter.codeBuilder`${this}${"+".repeat(variable as number)}`;
+    }
+  }
+
+  add(variable: Int) {
+    const tmp = variable.clone();
+    this.emitter.codeBuilder`${tmp}[${this}+${tmp}-]`;
+    tmp.destroy();
+  }
+
+  subtract(variable: Int) {
+    const tmp = variable.clone();
+    this.emitter.codeBuilder`${tmp}[${this}-${tmp}-]`;
+    tmp.destroy();
+  }
+
+  multiply(variable: Int) {
+    const x = this;
+    const y = variable;
+    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
+
+    this.emitter.codeBuilder`
+      ${x}[${tmp1}+${x}-]
+      ${tmp1}[
+        ${y}[${x}+${tmp0}+${y}-]
+        ${tmp0}[${y}+${tmp0}-]
+      ${tmp1}-]
+    `;
+  }
+
+  divide(variable: Int) {
+    const x = this;
+    const y = variable;
+    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp2 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp3 = new Int(this.emitter, null, "0", this.source, true);
+
+    this.emitter.codeBuilder`
+      ${x}[${tmp0}+${x}-]
+      ${tmp0}[
+      ${y}[${tmp1}+${tmp2}+${y}-]
+      ${tmp2}[${y}+${tmp2}-]
+      ${tmp1}[
+        ${tmp2}+
+        ${tmp0}-[${tmp2}[-]${tmp3}+${tmp0}-]
+        ${tmp3}[${tmp0}+${tmp3}-]
+        ${tmp2}[
+        ${tmp1}-
+        [${x}-${tmp1}[-]]+
+        ${tmp2}-]
+      ${tmp1}-]
+      ${x}+
+      ${tmp0}]
+    `;
+  }
+
+  power(variable: Int) {
+    const x = this;
+    const y = variable.clone();
+    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp2 = new Int(this.emitter, null, "0", this.source, true);
+
+    this.emitter.codeBuilder`
+      ${x}[${tmp0}+${x}-]
+      ${x}+
+      ${y}[
+        ${x}[${tmp2}+${x}-]
+        ${tmp2}[
+          ${tmp0}[${x}+${tmp1}+${tmp0}-]
+          ${tmp1}[${tmp0}+${tmp1}-]
+        ${tmp2}-]
+      ${y}-]
+    `;
   }
 }

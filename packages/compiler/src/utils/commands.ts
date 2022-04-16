@@ -9,3 +9,5 @@ export enum COMMANDS {
   LOOP_END = "]",
   MARKER = "#",
 }
+
+export const VALID_CHARS: string[] = Object.values(COMMANDS);

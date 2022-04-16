@@ -2,12 +2,13 @@ import { Braingoat } from "./Braingoat";
 
 try {
   const bg = new Braingoat(`
-int i = 0
-print(i) {
-  print(i) {
-    print(i)
-  }
-}
+int i = 2
+int j = 4
+print(i)
+
+power(i, j)
+print(i)
+print(j)
 `).compile();
 
   console.log(bg.bfCode);
