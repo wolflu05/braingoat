@@ -6,16 +6,20 @@ import { BasicDataType } from "../Types/BasicDataType";
 export type IntCast = number | string | Int;
 
 export class Int extends BasicDataType {
-  constructor(emitter: Emitter, name: string | null, value: string, source: LineType, addToMemory = false) {
+  constructor(emitter: Emitter, name: string | null, value: string, source: LineType, addToMemory = true) {
     super(emitter, name, source);
 
-    this.position = this.emitter.getNextNEmpty(1);
-
-    if (addToMemory) this.emitter.memoryAllocation.push(this);
+    this.allocate(addToMemory);
 
     if (!Number.isNaN(+value) && value !== "0") {
       this.set(value, false);
     }
+  }
+
+  allocate(addToMemory: boolean) {
+    this.position = this.emitter.getNextNEmpty(1);
+
+    if (addToMemory) this.emitter.memoryAllocation.push(this);
   }
 
   reset() {
@@ -23,8 +27,8 @@ export class Int extends BasicDataType {
   }
 
   clone() {
-    const tmp = new Int(this.emitter, null, "0", this.source, true);
-    const newVariable = new Int(this.emitter, null, "0", this.source, true);
+    const tmp = new Int(this.emitter, null, "0", this.source);
+    const newVariable = new Int(this.emitter, null, "0", this.source);
 
     // move value of this cell to tmp and newVariable
     this.emitter.codeBuilder`${this}[${tmp}+${newVariable}+${this}-]`;
@@ -103,8 +107,8 @@ export class Int extends BasicDataType {
   multiply(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp0 = new Int(this.emitter, null, "0", this.source);
+    const tmp1 = new Int(this.emitter, null, "0", this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp1}+${x}-]
@@ -118,10 +122,10 @@ export class Int extends BasicDataType {
   divide(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp2 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp3 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp0 = new Int(this.emitter, null, "0", this.source);
+    const tmp1 = new Int(this.emitter, null, "0", this.source);
+    const tmp2 = new Int(this.emitter, null, "0", this.source);
+    const tmp3 = new Int(this.emitter, null, "0", this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]
@@ -145,9 +149,9 @@ export class Int extends BasicDataType {
   power(variable: Int) {
     const x = this;
     const y = variable.clone();
-    const tmp0 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp1 = new Int(this.emitter, null, "0", this.source, true);
-    const tmp2 = new Int(this.emitter, null, "0", this.source, true);
+    const tmp0 = new Int(this.emitter, null, "0", this.source);
+    const tmp1 = new Int(this.emitter, null, "0", this.source);
+    const tmp2 = new Int(this.emitter, null, "0", this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]

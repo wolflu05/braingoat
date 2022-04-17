@@ -80,7 +80,7 @@ export class Emitter {
       this.braingoat.throwError(ErrorType.CompileError, `${type} is no valid data type`, source);
     }
 
-    this.memoryAllocation.push(new DataTypes[type as keyof typeof DataTypes](this, name, value, source));
+    this.memoryAllocation.push(new DataTypes[type as keyof typeof DataTypes](this, name, value, source, false));
   }
 
   getVariable(name: string | BasicDataType, source: LineType): BasicDataType | never {
