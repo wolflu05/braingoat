@@ -141,13 +141,6 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 6,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 7,
             "line": 0,
           },
@@ -155,24 +148,10 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 8,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 9,
             "line": 0,
           },
           "value": "2",
-        },
-        Object {
-          "source": Object {
-            "col": 10,
-            "line": 0,
-          },
-          "value": ",",
         },
         Object {
           "source": Object {
@@ -221,13 +200,6 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 6,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 7,
             "line": 0,
           },
@@ -235,24 +207,10 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 8,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 9,
             "line": 0,
           },
           "value": "2",
-        },
-        Object {
-          "source": Object {
-            "col": 10,
-            "line": 0,
-          },
-          "value": ",",
         },
         Object {
           "source": Object {
@@ -315,13 +273,6 @@ Array [
                     },
                     Object {
                       "source": Object {
-                        "col": 14,
-                        "line": 2,
-                      },
-                      "value": ",",
-                    },
-                    Object {
-                      "source": Object {
                         "col": 15,
                         "line": 2,
                       },
@@ -349,13 +300,6 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 6,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 7,
             "line": 0,
           },
@@ -363,24 +307,10 @@ Array [
         },
         Object {
           "source": Object {
-            "col": 8,
-            "line": 0,
-          },
-          "value": ",",
-        },
-        Object {
-          "source": Object {
             "col": 9,
             "line": 0,
           },
           "value": "2",
-        },
-        Object {
-          "source": Object {
-            "col": 10,
-            "line": 0,
-          },
-          "value": ",",
         },
         Object {
           "source": Object {
