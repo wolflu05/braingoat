@@ -2,11 +2,10 @@ import { Braingoat } from "./Braingoat";
 
 try {
   const bg = new Braingoat(`
-int i = 2
+int i = 4
 int j = 4
-print(i)
 
-power(i, j)
+neq(i, j)
 print(i)
 print(j)
 `).compile();

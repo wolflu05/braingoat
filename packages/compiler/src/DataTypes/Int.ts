@@ -87,6 +87,7 @@ export class Int extends BasicDataType {
     }
   }
 
+  // math operations
   add(variable: Int) {
     const tmp = variable.clone();
     this.emitter.codeBuilder`${tmp}[${this}+${tmp}-]`;
@@ -159,5 +160,18 @@ export class Int extends BasicDataType {
         ${tmp2}-]
       ${y}-]
     `;
+  }
+
+  // compare operations
+  eq(variable: Int) {
+    const x = this;
+    const y = variable.clone();
+    this.emitter.codeBuilder`${x}[-${y}-${x}]+${y}[${x}-${y}[-]]`;
+  }
+
+  neq(variable: Int) {
+    const x = this;
+    const y = variable.clone();
+    this.emitter.codeBuilder`${x}[${y}-${x}-]${y}[[-]${x}+${y}]`;
   }
 }
