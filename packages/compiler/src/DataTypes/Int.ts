@@ -1,4 +1,3 @@
-import { ErrorType } from "../Braingoat";
 import { Emitter } from "../Components/Emitter";
 import { LineType } from "../Components/Tokenizer";
 import { BasicDataType } from "../Types/BasicDataType";
@@ -6,14 +5,10 @@ import { BasicDataType } from "../Types/BasicDataType";
 export type IntCast = number | string | Int;
 
 export class Int extends BasicDataType {
-  constructor(emitter: Emitter, name: string | null, value: string, source: LineType, addToMemory = true) {
+  constructor(emitter: Emitter, name: string | null, source: LineType, addToMemory = true) {
     super(emitter, name, source);
 
     this.allocate(addToMemory);
-
-    if (!Number.isNaN(+value) && value !== "0") {
-      this.set(value, false);
-    }
   }
 
   allocate(addToMemory: boolean) {
@@ -27,8 +22,8 @@ export class Int extends BasicDataType {
   }
 
   clone() {
-    const tmp = new Int(this.emitter, null, "0", this.source);
-    const newVariable = new Int(this.emitter, null, "0", this.source);
+    const tmp = new Int(this.emitter, null, this.source);
+    const newVariable = new Int(this.emitter, null, this.source);
 
     // move value of this cell to tmp and newVariable
     this.emitter.codeBuilder`${this}[${tmp}+${newVariable}+${this}-]`;
@@ -42,32 +37,6 @@ export class Int extends BasicDataType {
     return newVariable;
   }
 
-  cast(variable: IntCast): number | Int {
-    if (typeof variable === "number") {
-      return variable;
-    }
-
-    if (variable instanceof Int) {
-      return variable;
-    }
-
-    if (typeof variable === "string") {
-      const num = variable.match(/^\d+/);
-      if (num) {
-        return +num[0];
-      }
-
-      const foundVariable = this.emitter.getVariable(variable, this.source);
-      if (!(foundVariable instanceof Int)) {
-        this.emitter.braingoat.throwError(ErrorType.CompileError, `Cannot cast ${foundVariable} to Int`, this.source);
-      }
-
-      return foundVariable;
-    }
-
-    this.emitter.braingoat.throwError(ErrorType.CompileError, `Cannot find variable ${variable}`, this.source);
-  }
-
   destroy() {
     this.reset();
     const idx = this.emitter.memoryAllocation.findIndex((v) => v === this);
@@ -77,17 +46,13 @@ export class Int extends BasicDataType {
     }
   }
 
-  set(variable: IntCast, reset = true) {
-    const castedVar = this.cast(variable);
+  set(variable: Int | number) {
+    this.reset();
 
-    if (reset) this.reset();
-
-    if (castedVar instanceof Int) {
-      const tmp = castedVar.clone();
-      this.emitter.codeBuilder`${tmp}[${this}+${tmp}-]`;
-      tmp.destroy();
+    if (variable instanceof Int) {
+      this.add(variable);
     } else {
-      this.emitter.codeBuilder`${this}${"+".repeat(variable as number)}`;
+      this.emitter.codeBuilder`${this}${"+".repeat(variable)}`;
     }
   }
 
@@ -107,8 +72,8 @@ export class Int extends BasicDataType {
   multiply(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, "0", this.source);
-    const tmp1 = new Int(this.emitter, null, "0", this.source);
+    const tmp0 = new Int(this.emitter, null, this.source);
+    const tmp1 = new Int(this.emitter, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp1}+${x}-]
@@ -122,10 +87,10 @@ export class Int extends BasicDataType {
   divide(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, "0", this.source);
-    const tmp1 = new Int(this.emitter, null, "0", this.source);
-    const tmp2 = new Int(this.emitter, null, "0", this.source);
-    const tmp3 = new Int(this.emitter, null, "0", this.source);
+    const tmp0 = new Int(this.emitter, null, this.source);
+    const tmp1 = new Int(this.emitter, null, this.source);
+    const tmp2 = new Int(this.emitter, null, this.source);
+    const tmp3 = new Int(this.emitter, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]
@@ -149,9 +114,9 @@ export class Int extends BasicDataType {
   power(variable: Int) {
     const x = this;
     const y = variable.clone();
-    const tmp0 = new Int(this.emitter, null, "0", this.source);
-    const tmp1 = new Int(this.emitter, null, "0", this.source);
-    const tmp2 = new Int(this.emitter, null, "0", this.source);
+    const tmp0 = new Int(this.emitter, null, this.source);
+    const tmp1 = new Int(this.emitter, null, this.source);
+    const tmp2 = new Int(this.emitter, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]

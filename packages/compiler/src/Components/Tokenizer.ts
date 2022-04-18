@@ -1,4 +1,5 @@
 import { generateSplitRegex } from "../utils";
+import { OPERATOR_MAP } from "./AST";
 
 export type LineType = {
   line: number;
@@ -13,7 +14,7 @@ export type TokenType = {
 export class Tokenizer {
   static tokenize(code: string[]) {
     const tokens: TokenType[] = [];
-    const splitters = [" ", "(", ")", "{", "}", "[", "]", ",", "=", "/\\/"];
+    const splitters = [" ", "(", ")", "{", "}", "[", "]", ",", "/\\/", ...Object.keys(OPERATOR_MAP), "="];
 
     for (const [lineNum, line] of Object.entries(code)) {
       const re = generateSplitRegex(splitters);
@@ -32,7 +33,7 @@ export class Tokenizer {
 
         // actual matched token
         tokens.push({
-          value: line.substring(m.index, m.index + 1),
+          value: m[0],
           source: { line: +lineNum, col: m.index },
         });
       }

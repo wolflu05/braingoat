@@ -3,8 +3,19 @@ import { DataTypes } from "../DataTypes";
 import { Int } from "../DataTypes/Int";
 import { Functions } from "../Functions";
 import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
+import { isValidVariableName } from "../utils";
 import { COMMANDS, VALID_CHARS } from "../utils/commands";
-import { AST, DECLARATION_OPTIONS, FUNCTION_CALL_OPTIONS, TOKEN_TYPES } from "./AST";
+import {
+  ASSIGNMENT_OPTIONS,
+  AST,
+  DECLARATION_OPTIONS,
+  EXPRESSION_OPERATOR_TYPE,
+  EXPRESSION_OPTIONS,
+  FUNCTION_CALL_OPTIONS,
+  TOKEN_TYPES,
+  VALUE_LITERAL_OPTIONS,
+  VARIABLE_LITERAL_OPTIONS,
+} from "./AST";
 import { LineType, TokenType } from "./Tokenizer";
 
 export class Emitter {
@@ -22,12 +33,116 @@ export class Emitter {
     this.braingoat = braingoat;
   }
 
+  emitExpression(variable: BasicDataType, expression: AST) {
+    // VALUE_LITERAL
+    if (expression.type === TOKEN_TYPES.VALUE_LITERAL) {
+      const tokenOptions = expression.tokenOptions as VALUE_LITERAL_OPTIONS;
+
+      // INT
+      if (variable instanceof DataTypes.Int && tokenOptions.type === "INT") {
+        variable.set(tokenOptions.value);
+      }
+
+      // INTLIST
+      else if (variable instanceof DataTypes.IntList && tokenOptions.type === "INTLIST") {
+        // variable.set()
+      }
+
+      // No valid combination
+      else {
+        this.braingoat.throwError(
+          ErrorType.CompileError,
+          `${tokenOptions.type} cannot assigned to ${typeof variable}`,
+          expression.source,
+        );
+      }
+    }
+
+    // VARIABLE_LITERAL
+    else if (expression.type === TOKEN_TYPES.VARIABLE_LITERAL) {
+      const tokenOptions = expression.tokenOptions as VARIABLE_LITERAL_OPTIONS;
+      const variableLiteral = this.getVariable(tokenOptions.name, expression.source);
+
+      // INT
+      if (variable instanceof DataTypes.Int && variableLiteral instanceof DataTypes.Int) {
+        variable.set(variableLiteral);
+      }
+
+      // INTLIST
+      else if (variable instanceof DataTypes.IntList && variableLiteral instanceof DataTypes.IntList) {
+        // variable.set()
+      }
+
+      // No valid combination
+      else {
+        this.braingoat.throwError(
+          ErrorType.CompileError,
+          `${typeof variableLiteral} cannot assigned to ${typeof variable}`,
+          expression.source,
+        );
+      }
+    }
+
+    // EXPRESSION
+    else if (expression.type === TOKEN_TYPES.EXPRESSION) {
+      const tokenOptions = expression.tokenOptions as EXPRESSION_OPTIONS;
+
+      if (variable instanceof DataTypes.Int) {
+        const leftVar = new Int(this, null, expression.source);
+        const rightVar = new Int(this, null, expression.source);
+        this.emitExpression(leftVar, tokenOptions.leftNode);
+        this.emitExpression(rightVar, tokenOptions.rightNode);
+
+        if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.ADD) {
+          leftVar.add(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.SUBTRACT) {
+          leftVar.subtract(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.MULTIPLY) {
+          leftVar.multiply(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.DIVIDE) {
+          leftVar.divide(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.POWER) {
+          leftVar.power(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.EQ) {
+          leftVar.eq(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.NEQ) {
+          leftVar.neq(rightVar);
+        }
+
+        variable.set(leftVar);
+        leftVar.destroy();
+        rightVar.destroy();
+      }
+
+      // No valid combination
+      else {
+        this.braingoat.throwError(
+          ErrorType.CompileError,
+          `cannot assign expression result to ${typeof variable}`,
+          expression.source,
+        );
+      }
+    }
+  }
+
   emit() {
     for (const node of this.ast) {
       // VARIABLE DECLARATION
       if (node.type === TOKEN_TYPES.DECLARATION) {
         const { type, variableName, value } = node.tokenOptions as DECLARATION_OPTIONS;
-        this.registerVariable(type, variableName, value, node.source);
+        if (!isValidVariableName(variableName)) {
+          this.braingoat.throwError(ErrorType.CompileError, `${variableName} is no valid variable name`, node.source);
+        }
+
+        const variable = this.registerVariable(type, variableName, node.source);
+        this.emitExpression(variable, value);
+      }
+
+      // VARIABLE ASSIGNMENT
+      if (node.type === TOKEN_TYPES.ASSIGNMENT) {
+        const { variableName, value } = node.tokenOptions as ASSIGNMENT_OPTIONS;
+        const variable = this.getVariable(variableName, node.source);
+        this.emitExpression(variable, value);
       }
 
       // FUNCTION CALL
@@ -75,12 +190,14 @@ export class Emitter {
     return [pos, pos + length - 1];
   }
 
-  registerVariable(type: string, name: string, value: string, source: LineType) {
+  registerVariable(type: string, name: string, source: LineType) {
     if (!(type in DataTypes)) {
       this.braingoat.throwError(ErrorType.CompileError, `${type} is no valid data type`, source);
     }
 
-    this.memoryAllocation.push(new DataTypes[type as keyof typeof DataTypes](this, name, value, source, false));
+    const variable = new DataTypes[type as keyof typeof DataTypes](this, name, source, false);
+    this.memoryAllocation.push(variable);
+    return variable;
   }
 
   getVariable(name: string | BasicDataType, source: LineType): BasicDataType | never {

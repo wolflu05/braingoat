@@ -22,3 +22,5 @@ export const findIndexAt = (idx: number, arr: any[], func: (item: any) => boolea
 
   return -1;
 };
+
+export const isValidVariableName = (name: string) => /^[a-zA-Z_]\w*$/.test(name);
