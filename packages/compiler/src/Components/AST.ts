@@ -15,11 +15,12 @@ export type DECLARATION_OPTIONS = {
   variableName: string;
   type: string;
   value: AST;
+  variableOptions: TokenType | null;
 };
 
 export type FUNCTION_CALL_OPTIONS = {
   functionName: string;
-  parameters: TokenType[];
+  parameters: AST[];
   block: AST[];
 };
 
@@ -54,15 +55,17 @@ export type VALUE_LITERAL_OPTIONS =
     }
   | {
       type: "INTLIST";
-      value: number[];
+      value: AST[];
     };
 export type VARIABLE_LITERAL_OPTIONS = {
   name: string;
+  index: AST | null;
 };
 
 export type ASSIGNMENT_OPTIONS = {
   variableName: string;
   value: AST;
+  index: AST | null;
 };
 
 export type TOKEN_OPTIONS =
@@ -121,16 +124,13 @@ export class AST {
         );
       }
 
-      const op = OPERATOR_MAP[tokens[exprIndex[1]].value as keyof typeof OPERATOR_MAP];
+      const operatorStr = tokens[exprIndex[1]].value as keyof typeof OPERATOR_MAP;
+      const op = OPERATOR_MAP[operatorStr];
       const leftNode = this.parseExpression(tokens, braingoat, exprIndex[0]);
       const rightNode = this.parseExpression(tokens, braingoat, exprIndex[2]);
 
       if (!op) {
-        braingoat.throwError(
-          ErrorType.SyntaxError,
-          `Invalid operator ${tokens[exprIndex[1]].value}`,
-          tokens[exprIndex[1]],
-        );
+        braingoat.throwError(ErrorType.SyntaxError, `Invalid operator ${operatorStr}`, tokens[exprIndex[1]]);
       }
       if (!leftNode) {
         braingoat.throwError(ErrorType.SyntaxError, "Expected left-side operant", tokens[exprIndex[1] - 1]);
@@ -153,12 +153,63 @@ export class AST {
       ];
     }
 
+    // INT Value literal
     if (!Number.isNaN(+token.value)) {
       return [new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "INT", value: +token.value }, token.source), startIndex + 1];
     }
 
+    // Array Value literal
+    if (token.value === "[") {
+      let k = startIndex + 1;
+      const values: AST[] = [];
+      while (k < tokens.length) {
+        if (tokens[k]?.value === ",") {
+          braingoat.throwError(ErrorType.SyntaxError, `Unexpected token , expected list item`, tokens[k]);
+        }
+
+        const nextIndex = findIndexAt(
+          k + 1,
+          tokens,
+          (t) => (t as TokenType).value === "," || (t as TokenType).value === "]",
+        );
+
+        if (nextIndex === -1) {
+          braingoat.throwError(ErrorType.SyntaxError, `Expected ]`, tokens[tokens.length - 1]);
+        }
+
+        const expression = this.parseExpression(tokens.slice(k, nextIndex), braingoat, 0);
+        if (!expression) {
+          braingoat.throwError(ErrorType.SyntaxError, `Invalid value`, tokens[k]);
+        }
+        values.push(expression[0]);
+
+        k += expression[1] + 1;
+
+        if (tokens[nextIndex].value === "]") {
+          break;
+        }
+      }
+
+      return [new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "INTLIST", value: values }, token.source), k];
+    }
+
+    // Variable literal
     if (isValidVariableName(token.value)) {
-      return [new AST(TOKEN_TYPES.VARIABLE_LITERAL, { name: token.value }, token.source), startIndex + 1];
+      let idxExpression = null;
+      let endIdx = startIndex + 1;
+
+      // check for array item getting
+      if (tokens[startIndex + 1]?.value === "[") {
+        const idxExpr = this.parseExpression(tokens, braingoat, startIndex + 2);
+        if (!idxExpr) {
+          braingoat.throwError(ErrorType.SyntaxError, "Invalid expression at index", tokens[startIndex + 1]);
+        }
+
+        idxExpression = idxExpr[0];
+        endIdx = idxExpr[1] + 1;
+      }
+
+      return [new AST(TOKEN_TYPES.VARIABLE_LITERAL, { name: token.value, index: idxExpression }, token.source), endIdx];
     }
 
     return null;
@@ -171,19 +222,30 @@ export class AST {
       let nextIndex = i;
 
       // DECLARATION
-      if (tokens[i + 2]?.value === "=") {
-        const expression = this.parseExpression(tokens, braingoat, i + 3);
+      if (tokens[i + 2]?.value === "=" || tokens[i + 5]?.value === "=") {
+        let hasOpt = tokens[i + 2].value !== "=";
+        if (hasOpt) {
+          if (tokens[i + 1]?.value !== "<") {
+            braingoat.throwError(ErrorType.SyntaxError, `Expected < got ${tokens[i + 1]?.value}`, tokens[i + 1]);
+          }
+          if (tokens[i + 3]?.value !== ">") {
+            braingoat.throwError(ErrorType.SyntaxError, `Expected > got ${tokens[i + 3]?.value}`, tokens[i + 3]);
+          }
+        }
+
+        const expression = this.parseExpression(tokens, braingoat, hasOpt ? i + 6 : i + 3);
         if (!expression) {
-          braingoat.throwError(ErrorType.SyntaxError, "Invalid expression", tokens[i + 3]);
+          braingoat.throwError(ErrorType.SyntaxError, "Invalid expression", tokens[hasOpt ? i + 6 : i + 3]);
         }
 
         tree.push(
           new AST(
             TOKEN_TYPES.DECLARATION,
             {
-              variableName: tokens[i + 1].value,
+              variableName: tokens[hasOpt ? i + 4 : i + 1].value,
               type: tokens[i].value,
               value: expression[0],
+              variableOptions: hasOpt ? tokens[i + 2] : null,
             },
             tokens[i].source,
           ),
@@ -192,10 +254,23 @@ export class AST {
       }
 
       // ASSIGNMENT
-      else if (tokens[i + 1]?.value === "=") {
-        const expression = this.parseExpression(tokens, braingoat, i + 2);
+      else if (tokens[i + 1]?.value === "=" || tokens[i + 1]?.value === "[") {
+        let hasIdx = tokens[i + 1].value === "[";
+        let idxExpression = null;
+        let endIdx = i + 2;
+        if (hasIdx) {
+          const idxExpr = this.parseExpression(tokens, braingoat, i + 2);
+          if (!idxExpr) {
+            braingoat.throwError(ErrorType.SyntaxError, "Invalid expression at index", tokens[i + 1]);
+          }
+
+          idxExpression = idxExpr[0];
+          endIdx = idxExpr[1] + 2;
+        }
+
+        const expression = this.parseExpression(tokens, braingoat, endIdx);
         if (!expression) {
-          braingoat.throwError(ErrorType.SyntaxError, "Invalid expression", tokens[i + 2]);
+          braingoat.throwError(ErrorType.SyntaxError, "Invalid expression", tokens[endIdx]);
         }
 
         tree.push(
@@ -204,6 +279,7 @@ export class AST {
             {
               variableName: tokens[i].value,
               value: expression[0],
+              index: idxExpression,
             },
             tokens[i].source,
           ),
@@ -213,19 +289,50 @@ export class AST {
 
       // FUNCTION_CALL
       else if (tokens[i + 1]?.value === "(") {
-        const endTokenIndex = findIndexAt(i + 1, tokens, (t) => t.value === ")");
-        if (endTokenIndex === -1) {
-          braingoat.throwError(ErrorType.SyntaxError, "Expected )", tokens[i + 1]);
+        // arguments parsing
+        let k = i + 2;
+        const params: AST[] = [];
+
+        while (k < tokens.length) {
+          if (tokens[k]?.value === ",") {
+            braingoat.throwError(ErrorType.SyntaxError, `Unexpected token , expected argument`, tokens[k]);
+          }
+
+          const stack = [];
+          let nextIndex = k + 2;
+
+          for (; nextIndex < tokens.length; nextIndex++) {
+            if (tokens[nextIndex].value === "(") {
+              stack.push("(");
+            } else if (tokens[nextIndex].value === ")") {
+              stack.pop();
+            }
+
+            if (stack.length === 0) break;
+
+            if (tokens[nextIndex].value === ",") break;
+          }
+
+          if (nextIndex === -1) {
+            braingoat.throwError(ErrorType.SyntaxError, `Expected )`, tokens[tokens.length - 1]);
+          }
+
+          const expression = this.parseExpression(tokens.slice(k, nextIndex + 1), braingoat, 0);
+          if (!expression) {
+            braingoat.throwError(ErrorType.SyntaxError, `Invalid argument`, tokens[k]);
+          }
+          params.push(expression[0]);
+
+          k += expression[1] + 1;
+
+          if (tokens[nextIndex].value === ")") {
+            break;
+          }
         }
 
-        const params = tokens.slice(i + 2, endTokenIndex);
-        const wrongIdx = params.findIndex((v, i) => ((i + 1) % 2 === 0 ? v.value !== "," : false));
+        let endTokenIndex = k;
 
-        if (wrongIdx !== -1) {
-          braingoat.throwError(ErrorType.SyntaxError, `Expected ,`, params[wrongIdx]);
-        }
-
-        // check for block function
+        // block function parsing
         let block: TokenType[] = [];
         if (tokens[endTokenIndex + 1]?.value === "{" && tokens.length > endTokenIndex + 2) {
           const stack = [];
@@ -255,7 +362,7 @@ export class AST {
             TOKEN_TYPES.FUNCTION_CALL,
             {
               functionName: tokens[i].value,
-              parameters: params.filter((x) => x.value !== ","),
+              parameters: params,
               block: AST.parse(block.slice(1), braingoat),
             },
             tokens[i].source,

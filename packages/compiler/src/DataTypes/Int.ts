@@ -1,18 +1,29 @@
 import { Emitter } from "../Components/Emitter";
-import { LineType } from "../Components/Tokenizer";
-import { BasicDataType } from "../Types/BasicDataType";
+import { LineType, TokenType } from "../Components/Tokenizer";
+import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
 
 export type IntCast = number | string | Int;
 
 export class Int extends BasicDataType {
-  constructor(emitter: Emitter, name: string | null, source: LineType, addToMemory = true) {
-    super(emitter, name, source);
+  constructor(
+    emitter: Emitter,
+    name: string | null,
+    variableOptions: TokenType | null,
+    source: LineType,
+    addToMemory = true,
+    position?: memoryPositionType,
+  ) {
+    super(emitter, name, variableOptions, source);
 
-    this.allocate(addToMemory);
+    this.allocate(addToMemory, position);
   }
 
-  allocate(addToMemory: boolean) {
-    this.position = this.emitter.getNextNEmpty(1);
+  allocate(addToMemory: boolean, position?: memoryPositionType) {
+    if (!position) {
+      this.position = this.emitter.getNextNEmpty(1);
+    } else {
+      this.position = position;
+    }
 
     if (addToMemory) this.emitter.memoryAllocation.push(this);
   }
@@ -22,8 +33,8 @@ export class Int extends BasicDataType {
   }
 
   clone() {
-    const tmp = new Int(this.emitter, null, this.source);
-    const newVariable = new Int(this.emitter, null, this.source);
+    const tmp = new Int(this.emitter, null, null, this.source);
+    const newVariable = new Int(this.emitter, null, null, this.source);
 
     // move value of this cell to tmp and newVariable
     this.emitter.codeBuilder`${this}[${tmp}+${newVariable}+${this}-]`;
@@ -72,8 +83,8 @@ export class Int extends BasicDataType {
   multiply(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, this.source);
-    const tmp1 = new Int(this.emitter, null, this.source);
+    const tmp0 = new Int(this.emitter, null, null, this.source);
+    const tmp1 = new Int(this.emitter, null, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp1}+${x}-]
@@ -87,10 +98,10 @@ export class Int extends BasicDataType {
   divide(variable: Int) {
     const x = this;
     const y = variable;
-    const tmp0 = new Int(this.emitter, null, this.source);
-    const tmp1 = new Int(this.emitter, null, this.source);
-    const tmp2 = new Int(this.emitter, null, this.source);
-    const tmp3 = new Int(this.emitter, null, this.source);
+    const tmp0 = new Int(this.emitter, null, null, this.source);
+    const tmp1 = new Int(this.emitter, null, null, this.source);
+    const tmp2 = new Int(this.emitter, null, null, this.source);
+    const tmp3 = new Int(this.emitter, null, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]
@@ -114,9 +125,9 @@ export class Int extends BasicDataType {
   power(variable: Int) {
     const x = this;
     const y = variable.clone();
-    const tmp0 = new Int(this.emitter, null, this.source);
-    const tmp1 = new Int(this.emitter, null, this.source);
-    const tmp2 = new Int(this.emitter, null, this.source);
+    const tmp0 = new Int(this.emitter, null, null, this.source);
+    const tmp1 = new Int(this.emitter, null, null, this.source);
+    const tmp2 = new Int(this.emitter, null, null, this.source);
 
     this.emitter.codeBuilder`
       ${x}[${tmp0}+${x}-]

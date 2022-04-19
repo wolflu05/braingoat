@@ -1,16 +1,15 @@
 import { Braingoat } from "./Braingoat";
-// IntList k = [1, 2, 3]
-
 try {
   const bg = new Braingoat(`
-  Int j = 100
-  Int i = 200
-  Int b = 0
+  Int a = 1
+  Int b = 1
+  
+  IntList<3> k = [10,20,30]
+  k[(a + b)] = 42
 
-  b = (i * j)
-
-  print(b)
+  print(k[(a+(b-1))])
   `).compile();
+  // k[1] = 5
   // b = (a + b)
   // Int a = (1 + (i * j)  )
   console.log(bg.bfCode);

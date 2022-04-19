@@ -1,10 +1,10 @@
 import { ErrorType } from "../Braingoat";
 import { AST } from "../Components/AST";
 import { Emitter } from "../Components/Emitter";
-import { LineType, TokenType } from "../Components/Tokenizer";
+import { LineType } from "../Components/Tokenizer";
 import { Int } from "../DataTypes/Int";
 
-export const print = (emitter: Emitter, args: TokenType[], block: AST[], source: LineType) => {
+export const print = (emitter: Emitter, args: AST[], block: AST[], source: LineType) => {
   if (block.length !== 0) {
     emitter.braingoat.throwError(ErrorType.CompileError, `print expected no block statement`, source);
   }
@@ -13,11 +13,10 @@ export const print = (emitter: Emitter, args: TokenType[], block: AST[], source:
     emitter.braingoat.throwError(ErrorType.CompileError, `print expected only 1 argument, got ${args.length}`, source);
   }
 
-  const variable = emitter.getVariable(args[0].value, args[0].source);
+  const variable = new Int(emitter, null, null, args[0].source);
+  emitter.emitExpression(variable, args[0]);
 
-  if (variable instanceof Int) {
-    emitter.codeBuilder`${variable}.`;
-  } else {
-    emitter.braingoat.throwError(ErrorType.CompileError, "Unsupported DataType for print", args[0].source);
-  }
+  emitter.codeBuilder`${variable}.`;
+
+  variable.destroy();
 };

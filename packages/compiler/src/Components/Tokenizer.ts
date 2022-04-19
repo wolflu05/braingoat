@@ -14,7 +14,7 @@ export type TokenType = {
 export class Tokenizer {
   static tokenize(code: string[]) {
     const tokens: TokenType[] = [];
-    const splitters = [" ", "(", ")", "{", "}", "[", "]", ",", "/\\/", ...Object.keys(OPERATOR_MAP), "="];
+    const splitters = [" ", "(", ")", "{", "}", "[", "]", ",", "/\\/", "<", ">", ...Object.keys(OPERATOR_MAP), "="];
 
     for (const [lineNum, line] of Object.entries(code)) {
       const re = generateSplitRegex(splitters);
