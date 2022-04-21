@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@braingoat/web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -46,5 +46,6 @@
     "@craco/craco": "^6.4.3",
     "monaco-editor": "^0.33.0",
     "ts-loader": "^9.2.8"
-  }
+  },
+  "homepage": "https://wolflu05.github.io/braingoat"
 }
