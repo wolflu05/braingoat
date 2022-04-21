@@ -2,7 +2,7 @@
   "name": "@braingoat/compiler",
   "version": "0.1.0",
   "description": "The braingoat to bf compiler",
-  "main": "dist/index.js",
+  "main": "src/Braingoat.ts",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "test": "jest"
