@@ -321,11 +321,7 @@ export class AST {
           }
           params.push(expression[0]);
 
-          if (nextArg + 2 < endingBracket) {
-            k = nextArg + 2;
-          } else {
-            k = nextArg + 1;
-          }
+          k = nextArg + 1;
         }
 
         let endTokenIndex = k;

@@ -75,7 +75,11 @@ export const findMatchingBracket = (
   }
 
   if (stack.length !== 0) {
-    braingoat.throwError(ErrorType.SyntaxError, `Expected tokens ${stack.join("")}`, tokens[i]);
+    braingoat.throwError(
+      ErrorType.SyntaxError,
+      `Expected tokens ${stack.map((x) => bracketMap[x]).join("")}`,
+      tokens[i],
+    );
   }
 
   return i - 1;

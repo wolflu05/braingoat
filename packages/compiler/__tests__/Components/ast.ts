@@ -45,7 +45,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
     [
       { value: "abc", source: { line: 0, col: 0 } },
       { value: "(", source: { line: 0, col: 3 } },
-      { value: "1x", source: { line: 0, col: 4 } },
+      { value: "x1", source: { line: 0, col: 4 } },
       { value: ",", source: { line: 0, col: 6 } },
       { value: "1", source: { line: 0, col: 7 } },
       { value: ",", source: { line: 0, col: 8 } },
@@ -54,7 +54,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
       { value: "3", source: { line: 0, col: 11 } },
       { value: ")", source: { line: 0, col: 12 } },
     ],
-    "abc(1x,1,2,3)",
+    "abc(x1,1,2,3)",
     true,
   ],
   [
@@ -87,7 +87,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
     [
       { value: "abc", source: { line: 0, col: 0 } },
       { value: "(", source: { line: 0, col: 3 } },
-      { value: "1x", source: { line: 0, col: 4 } },
+      { value: "x1", source: { line: 0, col: 4 } },
       { value: ",", source: { line: 0, col: 6 } },
       { value: "1", source: { line: 0, col: 7 } },
       { value: ",", source: { line: 0, col: 8 } },
@@ -103,7 +103,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
       { value: "}", source: { line: 1, col: 6 } },
       { value: "}", source: { line: 2, col: 0 } },
     ],
-    "abc(1x,1,2,3) {\n  abc(){}\n}",
+    "abc(x1,1,2,3) {\n  abc(){}\n}",
     true,
   ],
   [
@@ -111,7 +111,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
     [
       { value: "abc", source: { line: 0, col: 0 } },
       { value: "(", source: { line: 0, col: 3 } },
-      { value: "1x", source: { line: 0, col: 4 } },
+      { value: "x1", source: { line: 0, col: 4 } },
       { value: ",", source: { line: 0, col: 6 } },
       { value: "1", source: { line: 0, col: 7 } },
       { value: ",", source: { line: 0, col: 8 } },
@@ -138,7 +138,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
       { value: "}", source: { line: 5, col: 7 } },
       { value: "}", source: { line: 6, col: 5 } },
     ],
-    `abc(1x,1,2,3) {
+    `abc(x1,1,2,3) {
       abc() {
         def(1,2) {
           abc()
@@ -152,7 +152,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
     [
       { value: "abc", source: { line: 0, col: 0 } },
       { value: "(", source: { line: 0, col: 3 } },
-      { value: "1x", source: { line: 0, col: 4 } },
+      { value: "x1", source: { line: 0, col: 4 } },
       { value: ",", source: { line: 0, col: 6 } },
       { value: "1", source: { line: 0, col: 7 } },
       { value: ",", source: { line: 0, col: 8 } },
@@ -160,7 +160,7 @@ const astCases: Array<[string, TokenType[], string, boolean]> = [
       { value: ",", source: { line: 0, col: 10 } },
       { value: "3", source: { line: 0, col: 11 } },
     ],
-    "abc(1x,1,2,3",
+    "abc(x1,1,2,3",
     false,
   ],
   [

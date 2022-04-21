@@ -9,9 +9,9 @@ abc(1,2,3) {{}
 
 exports[`tokenize Function call without ending ) 1`] = `
 "
-abc(1x,1,2,3
-   ^ L0:4
-   SyntaxError: Expected )"
+abc(x1,1,2,3
+^ L0:1
+SyntaxError: Expected tokens )"
 `;
 
 exports[`tokenize Function call without ending block } 1`] = `
@@ -82,12 +82,16 @@ Array [
       "block": Array [],
       "functionName": "abc",
       "parameters": Array [
-        Object {
+        AST {
           "source": Object {
             "col": 4,
             "line": 0,
           },
-          "value": "1",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 1,
+          },
+          "type": "VALUE_LITERAL",
         },
       ],
     },
@@ -107,12 +111,16 @@ Array [
       "block": Array [],
       "functionName": "abc",
       "parameters": Array [
-        Object {
+        AST {
           "source": Object {
             "col": 4,
             "line": 0,
           },
-          "value": "1",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 1,
+          },
+          "type": "VALUE_LITERAL",
         },
       ],
     },
@@ -132,33 +140,49 @@ Array [
       "block": Array [],
       "functionName": "abc",
       "parameters": Array [
-        Object {
+        AST {
           "source": Object {
             "col": 4,
             "line": 0,
           },
-          "value": "1x",
+          "tokenOptions": Object {
+            "index": null,
+            "name": "x1",
+          },
+          "type": "VARIABLE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 7,
             "line": 0,
           },
-          "value": "1",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 1,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 9,
             "line": 0,
           },
-          "value": "2",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 2,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 11,
             "line": 0,
           },
-          "value": "3",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 3,
+          },
+          "type": "VALUE_LITERAL",
         },
       ],
     },
@@ -191,33 +215,49 @@ Array [
       ],
       "functionName": "abc",
       "parameters": Array [
-        Object {
+        AST {
           "source": Object {
             "col": 4,
             "line": 0,
           },
-          "value": "1x",
+          "tokenOptions": Object {
+            "index": null,
+            "name": "x1",
+          },
+          "type": "VARIABLE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 7,
             "line": 0,
           },
-          "value": "1",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 1,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 9,
             "line": 0,
           },
-          "value": "2",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 2,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 11,
             "line": 0,
           },
-          "value": "3",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 3,
+          },
+          "type": "VALUE_LITERAL",
         },
       ],
     },
@@ -264,19 +304,27 @@ Array [
                   ],
                   "functionName": "def",
                   "parameters": Array [
-                    Object {
+                    AST {
                       "source": Object {
                         "col": 13,
                         "line": 2,
                       },
-                      "value": "1",
+                      "tokenOptions": Object {
+                        "type": "INT",
+                        "value": 1,
+                      },
+                      "type": "VALUE_LITERAL",
                     },
-                    Object {
+                    AST {
                       "source": Object {
                         "col": 15,
                         "line": 2,
                       },
-                      "value": "2",
+                      "tokenOptions": Object {
+                        "type": "INT",
+                        "value": 2,
+                      },
+                      "type": "VALUE_LITERAL",
                     },
                   ],
                 },
@@ -291,33 +339,49 @@ Array [
       ],
       "functionName": "abc",
       "parameters": Array [
-        Object {
+        AST {
           "source": Object {
             "col": 4,
             "line": 0,
           },
-          "value": "1x",
+          "tokenOptions": Object {
+            "index": null,
+            "name": "x1",
+          },
+          "type": "VARIABLE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 7,
             "line": 0,
           },
-          "value": "1",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 1,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 9,
             "line": 0,
           },
-          "value": "2",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 2,
+          },
+          "type": "VALUE_LITERAL",
         },
-        Object {
+        AST {
           "source": Object {
             "col": 11,
             "line": 0,
           },
-          "value": "3",
+          "tokenOptions": Object {
+            "type": "INT",
+            "value": 3,
+          },
+          "type": "VALUE_LITERAL",
         },
       ],
     },
@@ -335,8 +399,19 @@ Array [
     },
     "tokenOptions": Object {
       "type": "abc",
-      "value": "0",
+      "value": AST {
+        "source": Object {
+          "col": 8,
+          "line": 0,
+        },
+        "tokenOptions": Object {
+          "type": "INT",
+          "value": 0,
+        },
+        "type": "VALUE_LITERAL",
+      },
       "variableName": "i",
+      "variableOptions": null,
     },
     "type": "DECLARATION",
   },
@@ -347,8 +422,19 @@ Array [
     },
     "tokenOptions": Object {
       "type": "int",
-      "value": "1",
+      "value": AST {
+        "source": Object {
+          "col": 8,
+          "line": 1,
+        },
+        "tokenOptions": Object {
+          "type": "INT",
+          "value": 1,
+        },
+        "type": "VALUE_LITERAL",
+      },
       "variableName": "j",
+      "variableOptions": null,
     },
     "type": "DECLARATION",
   },
