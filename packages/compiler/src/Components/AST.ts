@@ -1,5 +1,5 @@
 import { Braingoat, ErrorType } from "../Braingoat";
-import { findIndexAt, isValidVariableName } from "../utils";
+import { findIndexAt, findMatchingBracket, isValidVariableName } from "../utils";
 import { LineType, TokenType } from "./Tokenizer";
 
 export enum TOKEN_TYPES {
@@ -98,8 +98,14 @@ export class AST {
       const stack = [];
       let k = startIndex;
 
-      for (; k < tokens.length; k++) {
+      for (; k < tokens.length; ) {
+        let nextIndex = k + 1;
         if (stack.length === 1) {
+          let endingIdx = k;
+          if (tokens[k + 1]?.value === "[") {
+            endingIdx = findMatchingBracket(tokens, braingoat, { startIndex: k + 1, bracketMap: { "[": "]" } });
+            nextIndex = endingIdx + 1;
+          }
           exprIndex.push(k);
         }
 
@@ -110,6 +116,8 @@ export class AST {
         }
 
         if (stack.length === 0) break;
+
+        k = nextIndex;
       }
 
       if (stack.length !== 0) {
@@ -293,40 +301,30 @@ export class AST {
         let k = i + 2;
         const params: AST[] = [];
 
-        while (k < tokens.length) {
+        const endingBracket = findMatchingBracket(tokens, braingoat, { startIndex: i + 1, bracketMap: { "(": ")" } });
+
+        while (k < endingBracket) {
           if (tokens[k]?.value === ",") {
             braingoat.throwError(ErrorType.SyntaxError, `Unexpected token , expected argument`, tokens[k]);
           }
 
-          const stack = [];
-          let nextIndex = k + 2;
+          const nextArg = findMatchingBracket(tokens, braingoat, {
+            startIndex: k,
+            bracketMap: { "(": ")" },
+            stop: (x) => x.value === ",",
+            endIndex: endingBracket - 1,
+          });
 
-          for (; nextIndex < tokens.length; nextIndex++) {
-            if (tokens[nextIndex].value === "(") {
-              stack.push("(");
-            } else if (tokens[nextIndex].value === ")") {
-              stack.pop();
-            }
-
-            if (stack.length === 0) break;
-
-            if (tokens[nextIndex].value === ",") break;
-          }
-
-          if (nextIndex === -1) {
-            braingoat.throwError(ErrorType.SyntaxError, `Expected )`, tokens[tokens.length - 1]);
-          }
-
-          const expression = this.parseExpression(tokens.slice(k, nextIndex + 1), braingoat, 0);
+          const expression = this.parseExpression(tokens.slice(k, nextArg + 1), braingoat, 0);
           if (!expression) {
             braingoat.throwError(ErrorType.SyntaxError, `Invalid argument`, tokens[k]);
           }
           params.push(expression[0]);
 
-          k += expression[1] + 1;
-
-          if (tokens[nextIndex].value === ")") {
-            break;
+          if (nextArg + 2 < endingBracket) {
+            k = nextArg + 2;
+          } else {
+            k = nextArg + 1;
           }
         }
 
