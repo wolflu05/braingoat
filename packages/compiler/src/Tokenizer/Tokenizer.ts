@@ -2,8 +2,10 @@ import { generateSplitRegex } from "../utils";
 import { OPERATOR_MAP } from "../AST";
 
 export type LineType = {
-  line: number;
-  col: number;
+  startLine: number;
+  endLine: number;
+  startCol: number;
+  endCol: number;
 };
 
 export type TokenType = {
@@ -28,20 +30,35 @@ export class Tokenizer {
         // token between match
         tokens.push({
           value: line.substring(p, m.index),
-          source: { line: +lineNum, col: p },
+          source: {
+            startLine: +lineNum + 1,
+            endLine: +lineNum + 1,
+            startCol: p,
+            endCol: m.index,
+          },
         });
 
         // actual matched token
         tokens.push({
           value: m[0],
-          source: { line: +lineNum, col: m.index },
+          source: {
+            startLine: +lineNum + 1,
+            endLine: +lineNum + 1,
+            startCol: m.index,
+            endCol: m.index + m[0].length,
+          },
         });
       }
 
       // last token in line
       tokens.push({
         value: line.substring(p),
-        source: { line: +lineNum, col: p },
+        source: {
+          startLine: +lineNum + 1,
+          endLine: +lineNum + 1,
+          startCol: p,
+          endCol: line.length,
+        },
       });
     }
 

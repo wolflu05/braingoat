@@ -27,7 +27,7 @@ export class Braingoat {
   }
 
   throwError(type: ErrorType, message: string, token: TokenType | LineType): never {
-    if (!token) token = { line: 0, col: 0 };
+    if (!token) token = { startLine: 0, startCol: 0, endLine: 0, endCol: 0 };
     let source;
     if ("source" in token) {
       source = token.source as LineType;
@@ -36,10 +36,12 @@ export class Braingoat {
     }
 
     let stack = "";
-    stack += `${this.code[source.line - 1] || ""}\n`;
-    stack += `${this.code[source.line]}\n`;
-    stack += `${" ".repeat(source.col)}^ L${source.line}:${source.col + 1}\n`;
-    stack += `${" ".repeat(source.col)}${type}: ${message}`;
+    stack += `${this.code[source.startLine - 2] || ""}\n`;
+    stack += `${this.code[source.startLine - 1] || ""}\n`;
+    stack += `${" ".repeat(source.startCol)}${"^".repeat(source.endCol - source.startCol)} L${source.startLine}:${
+      source.startCol
+    }-${source.endCol}\n`;
+    stack += `${" ".repeat(source.startCol)}${type}: ${message}`;
 
     if (type == ErrorType.SyntaxError) {
       const error = new SyntaxError(message, stack, source);

@@ -375,7 +375,7 @@ export class AST {
 
       // UNPROCESSED KEYWORD
       else {
-        braingoat.throwError(ErrorType.SyntaxError, "Unprocessed keyword", tokens[i]);
+        braingoat.throwError(ErrorType.SyntaxError, `Unprocessed keyword "${tokens[i].value}"`, tokens[i]);
       }
 
       if (i === nextIndex) {

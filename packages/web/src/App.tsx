@@ -21,6 +21,7 @@ function App() {
     try {
       braingoat.compile();
       setCompiledCode(braingoat.bfCode);
+      editor.current.clearError();
     } catch (error: any) {
       editor.current.setError(error);
       setCompiledCode(error?.stack || error);

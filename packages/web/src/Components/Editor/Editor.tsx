@@ -16,6 +16,7 @@ interface EditorProps {
 const Editor = forwardRef(({ onChange }: EditorProps, ref) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const monacoRef = useRef<Monaco>();
+  const modelRef = useRef<editor.ITextModel | null>();
 
   const handleEditorWillMount: BeforeMount = useCallback((monaco) => {
     monaco.languages.register({ id: "braingoat" });
@@ -28,27 +29,29 @@ const Editor = forwardRef(({ onChange }: EditorProps, ref) => {
   const handleEditorMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
+    modelRef.current = editor.getModel();
   }, []);
 
   useImperativeHandle(ref, () => ({
     setError(error: any) {
       console.log(error);
-      if (!monacoRef.current || !editorRef.current) return;
-      const editor = editorRef.current.getModel();
-      if (!editor) return;
-
+      if (!monacoRef.current || !editorRef.current || !modelRef.current) return;
       if (!error.source) return;
 
-      monacoRef.current.editor.setModelMarkers(editor, "Test", [
+      monacoRef.current.editor.setModelMarkers(modelRef.current, "braingoat", [
         {
-          startLineNumber: error.source.line + 1,
-          startColumn: error.source.col + 1,
-          endLineNumber: error.source.line + 1,
-          endColumn: error.source.col + 6,
+          startLineNumber: error.source.startLine,
+          startColumn: error.source.startCol + 1,
+          endLineNumber: error.source.endLine,
+          endColumn: error.source + 1,
           message: error.message,
           severity: MarkerSeverity.Error,
         },
       ]);
+    },
+    clearError() {
+      if (!monacoRef.current || !modelRef.current) return;
+      monacoRef.current.editor.setModelMarkers(modelRef.current, "braingoat", []);
     },
   }));
 

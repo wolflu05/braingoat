@@ -2,37 +2,37 @@
 
 exports[`tokenize Function call with more { 1`] = `
 "
-abc(1,2,3) {{}
-             ^ L0:14
+
+             ^ L0:13-14
              SyntaxError: Expected }"
 `;
 
 exports[`tokenize Function call without ending ) 1`] = `
 "
-abc(x1,1,2,3
-^ L0:1
+
+ L0:0-0
 SyntaxError: Expected tokens )"
 `;
 
 exports[`tokenize Function call without ending block } 1`] = `
 "
-abc(1,2,3) {
-           ^ L0:12
-           SyntaxError: Unprocessed keyword"
+
+           ^ L0:11-12
+           SyntaxError: Unprocessed keyword \\"{\\""
 `;
 
 exports[`tokenize Unprocessed keyword 1`] = `
 "
-{
-^ L0:1
-SyntaxError: Unprocessed keyword"
+
+^ L0:0-1
+SyntaxError: Unprocessed keyword \\"{\\""
 `;
 
 exports[`tokenize Unprocessed word keyword 1`] = `
 "
-hello
-^ L0:1
-SyntaxError: Unprocessed keyword"
+
+^^^^^ L0:0-5
+SyntaxError: Unprocessed keyword \\"hello\\""
 `;
 
 exports[`tokenize empty token list 1`] = `Array []`;
@@ -41,8 +41,10 @@ exports[`tokenize should parse functions 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [],
@@ -58,8 +60,10 @@ exports[`tokenize should parse functions with block 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [],
@@ -75,8 +79,10 @@ exports[`tokenize should parse functions with parameter 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [],
@@ -84,8 +90,10 @@ Array [
       "parameters": Array [
         AST {
           "source": Object {
-            "col": 4,
-            "line": 0,
+            "endCol": 5,
+            "endLine": 0,
+            "startCol": 4,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -104,8 +112,10 @@ exports[`tokenize should parse functions with parameter and block 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [],
@@ -113,8 +123,10 @@ Array [
       "parameters": Array [
         AST {
           "source": Object {
-            "col": 4,
-            "line": 0,
+            "endCol": 5,
+            "endLine": 0,
+            "startCol": 4,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -133,8 +145,10 @@ exports[`tokenize should parse functions with parameters 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [],
@@ -142,8 +156,10 @@ Array [
       "parameters": Array [
         AST {
           "source": Object {
-            "col": 4,
-            "line": 0,
+            "endCol": 6,
+            "endLine": 0,
+            "startCol": 4,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "index": null,
@@ -153,8 +169,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 7,
-            "line": 0,
+            "endCol": 8,
+            "endLine": 0,
+            "startCol": 7,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -164,8 +182,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 9,
-            "line": 0,
+            "endCol": 10,
+            "endLine": 0,
+            "startCol": 9,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -175,8 +195,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 11,
-            "line": 0,
+            "endCol": 12,
+            "endLine": 0,
+            "startCol": 11,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -195,15 +217,19 @@ exports[`tokenize should parse functions with parameters and block 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [
         AST {
           "source": Object {
-            "col": 2,
-            "line": 1,
+            "endCol": 4,
+            "endLine": 1,
+            "startCol": 2,
+            "startLine": 1,
           },
           "tokenOptions": Object {
             "block": Array [],
@@ -217,8 +243,10 @@ Array [
       "parameters": Array [
         AST {
           "source": Object {
-            "col": 4,
-            "line": 0,
+            "endCol": 5,
+            "endLine": 0,
+            "startCol": 4,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "index": null,
@@ -228,8 +256,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 7,
-            "line": 0,
+            "endCol": 8,
+            "endLine": 0,
+            "startCol": 7,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -239,8 +269,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 9,
-            "line": 0,
+            "endCol": 10,
+            "endLine": 0,
+            "startCol": 9,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -250,8 +282,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 11,
-            "line": 0,
+            "endCol": 12,
+            "endLine": 0,
+            "startCol": 11,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -270,29 +304,37 @@ exports[`tokenize should parse functions with parameters and nested blocks 1`] =
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "block": Array [
         AST {
           "source": Object {
-            "col": 7,
-            "line": 1,
+            "endCol": 10,
+            "endLine": 1,
+            "startCol": 7,
+            "startLine": 1,
           },
           "tokenOptions": Object {
             "block": Array [
               AST {
                 "source": Object {
-                  "col": 9,
-                  "line": 2,
+                  "endCol": 12,
+                  "endLine": 2,
+                  "startCol": 9,
+                  "startLine": 2,
                 },
                 "tokenOptions": Object {
                   "block": Array [
                     AST {
                       "source": Object {
-                        "col": 11,
-                        "line": 3,
+                        "endCol": 14,
+                        "endLine": 3,
+                        "startCol": 11,
+                        "startLine": 3,
                       },
                       "tokenOptions": Object {
                         "block": Array [],
@@ -306,8 +348,10 @@ Array [
                   "parameters": Array [
                     AST {
                       "source": Object {
-                        "col": 13,
-                        "line": 2,
+                        "endCol": 14,
+                        "endLine": 2,
+                        "startCol": 13,
+                        "startLine": 2,
                       },
                       "tokenOptions": Object {
                         "type": "INT",
@@ -317,8 +361,10 @@ Array [
                     },
                     AST {
                       "source": Object {
-                        "col": 15,
-                        "line": 2,
+                        "endCol": 16,
+                        "endLine": 2,
+                        "startCol": 15,
+                        "startLine": 2,
                       },
                       "tokenOptions": Object {
                         "type": "INT",
@@ -341,8 +387,10 @@ Array [
       "parameters": Array [
         AST {
           "source": Object {
-            "col": 4,
-            "line": 0,
+            "endCol": 6,
+            "endLine": 0,
+            "startCol": 4,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "index": null,
@@ -352,8 +400,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 7,
-            "line": 0,
+            "endCol": 8,
+            "endLine": 0,
+            "startCol": 7,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -363,8 +413,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 9,
-            "line": 0,
+            "endCol": 10,
+            "endLine": 0,
+            "startCol": 9,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -374,8 +426,10 @@ Array [
         },
         AST {
           "source": Object {
-            "col": 11,
-            "line": 0,
+            "endCol": 12,
+            "endLine": 0,
+            "startCol": 11,
+            "startLine": 0,
           },
           "tokenOptions": Object {
             "type": "INT",
@@ -394,15 +448,19 @@ exports[`tokenize tokenize two variables 1`] = `
 Array [
   AST {
     "source": Object {
-      "col": 0,
-      "line": 0,
+      "endCol": 3,
+      "endLine": 0,
+      "startCol": 0,
+      "startLine": 0,
     },
     "tokenOptions": Object {
       "type": "abc",
       "value": AST {
         "source": Object {
-          "col": 8,
-          "line": 0,
+          "endCol": 9,
+          "endLine": 0,
+          "startCol": 8,
+          "startLine": 0,
         },
         "tokenOptions": Object {
           "type": "INT",
@@ -417,15 +475,19 @@ Array [
   },
   AST {
     "source": Object {
-      "col": 0,
-      "line": 1,
+      "endCol": 3,
+      "endLine": 1,
+      "startCol": 0,
+      "startLine": 1,
     },
     "tokenOptions": Object {
       "type": "int",
       "value": AST {
         "source": Object {
-          "col": 8,
-          "line": 1,
+          "endCol": 9,
+          "endLine": 1,
+          "startCol": 8,
+          "startLine": 1,
         },
         "tokenOptions": Object {
           "type": "INT",
