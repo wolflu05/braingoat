@@ -229,17 +229,31 @@ export class AST {
     for (let i = 0; i < tokens.length; ) {
       let nextIndex = i;
 
-      // DECLARATION
-      if (tokens[i + 2]?.value === "=" || tokens[i + 5]?.value === "=") {
-        let hasOpt = tokens[i + 2].value !== "=";
-        if (hasOpt) {
-          if (tokens[i + 1]?.value !== "<") {
-            braingoat.throwError(ErrorType.SyntaxError, `Expected < got ${tokens[i + 1]?.value}`, tokens[i + 1]);
-          }
-          if (tokens[i + 3]?.value !== ">") {
-            braingoat.throwError(ErrorType.SyntaxError, `Expected > got ${tokens[i + 3]?.value}`, tokens[i + 3]);
-          }
+      // COMMENTS
+      if (tokens[i].value === "/*") {
+        const endingIndex = findIndexAt(i + 1, tokens, (t) => (t as TokenType).value === "*/");
+        if (endingIndex === -1) {
+          braingoat.throwError(ErrorType.SyntaxError, "Expected */", tokens[tokens.length - 1]);
         }
+        nextIndex = endingIndex + 1;
+
+        console.log(
+          tokens.map((x) => x.value),
+          nextIndex,
+        );
+      }
+
+      // DECLARATION
+      else if (
+        tokens[i + 2]?.value === "=" ||
+        (tokens[i + 1]?.value === "<" && tokens[i + 3]?.value === ">" && tokens[i + 5]?.value === "=")
+      ) {
+        console.log(
+          nextIndex,
+          tokens.map((x) => x.value),
+        );
+
+        let hasOpt = tokens[i + 2].value !== "=";
 
         const expression = this.parseExpression(tokens, braingoat, hasOpt ? i + 6 : i + 3);
         if (!expression) {
