@@ -1,7 +1,7 @@
-import { ErrorType } from "../Braingoat";
-import { Emitter } from "../Components/Emitter";
-import { LineType, TokenType } from "../Components/Tokenizer";
-import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
+import { ErrorType } from "../../Braingoat";
+import { Emitter } from "..";
+import { LineType, TokenType } from "../../Tokenizer";
+import { BasicDataType, memoryPositionType } from "../AbstractDataTypes/BasicDataType";
 import { Int } from "./Int";
 
 const TMP_CELLS = 4;

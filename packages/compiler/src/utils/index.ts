@@ -1,5 +1,5 @@
 import { Braingoat, ErrorType } from "../Braingoat";
-import { TokenType } from "../Components/Tokenizer";
+import { TokenType } from "../Tokenizer";
 
 export const escapeRegexStr = (str: string) => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 

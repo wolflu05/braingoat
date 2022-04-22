@@ -1,5 +1,5 @@
 import { generateSplitRegex } from "../utils";
-import { OPERATOR_MAP } from "./AST";
+import { OPERATOR_MAP } from "../AST";
 
 export type LineType = {
   line: number;

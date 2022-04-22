@@ -1,4 +1,4 @@
-import { Tokenizer } from "../../src/Components/Tokenizer";
+import { Tokenizer } from "../../src/Tokenizer";
 
 describe("tokenize", () => {
   test("tokenize single variable", () => {

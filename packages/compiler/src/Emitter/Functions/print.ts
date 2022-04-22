@@ -1,7 +1,7 @@
-import { ErrorType } from "../Braingoat";
-import { AST } from "../Components/AST";
-import { Emitter } from "../Components/Emitter";
-import { LineType } from "../Components/Tokenizer";
+import { ErrorType } from "../../Braingoat";
+import { AST } from "../../AST";
+import { Emitter } from "..";
+import { LineType } from "../../Tokenizer";
 import { Int } from "../DataTypes/Int";
 
 export const print = (emitter: Emitter, args: AST[], block: AST[], source: LineType) => {

@@ -1,6 +1,6 @@
 import { Braingoat, ErrorType } from "../Braingoat";
 import { findIndexAt, findMatchingBracket, isValidVariableName } from "../utils";
-import { LineType, TokenType } from "./Tokenizer";
+import { LineType, TokenType } from "../Tokenizer";
 
 export enum TOKEN_TYPES {
   DECLARATION = "DECLARATION",
@@ -248,12 +248,7 @@ export class AST {
         tokens[i + 2]?.value === "=" ||
         (tokens[i + 1]?.value === "<" && tokens[i + 3]?.value === ">" && tokens[i + 5]?.value === "=")
       ) {
-        console.log(
-          nextIndex,
-          tokens.map((x) => x.value),
-        );
-
-        let hasOpt = tokens[i + 2].value !== "=";
+        const hasOpt = tokens[i + 2].value !== "=";
 
         const expression = this.parseExpression(tokens, braingoat, hasOpt ? i + 6 : i + 3);
         if (!expression) {

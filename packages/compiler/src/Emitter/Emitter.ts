@@ -1,9 +1,9 @@
 import { Braingoat, ErrorType } from "../Braingoat";
-import { DataTypes } from "../DataTypes";
-import { Int } from "../DataTypes/Int";
-import { IntList } from "../DataTypes/IntList";
-import { Functions } from "../Functions";
-import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
+import { DataTypes } from "./DataTypes";
+import { Int } from "./DataTypes/Int";
+import { IntList } from "./DataTypes/IntList";
+import { Functions } from "./Functions";
+import { BasicDataType, memoryPositionType } from "./AbstractDataTypes/BasicDataType";
 import { isValidVariableName } from "../utils";
 import { COMMANDS, VALID_CHARS } from "../utils/commands";
 import {
@@ -16,8 +16,8 @@ import {
   TOKEN_TYPES,
   VALUE_LITERAL_OPTIONS,
   VARIABLE_LITERAL_OPTIONS,
-} from "./AST";
-import { LineType, TokenType } from "./Tokenizer";
+} from "../AST";
+import { LineType, TokenType } from "../Tokenizer";
 
 export class Emitter {
   memoryAllocation: BasicDataType[];

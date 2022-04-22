@@ -1,6 +1,6 @@
-import { AST } from "./Components/AST";
-import { Emitter } from "./Components/Emitter";
-import { LineType, Tokenizer, TokenType } from "./Components/Tokenizer";
+import { AST } from "./AST";
+import { Emitter } from "./Emitter";
+import { LineType, Tokenizer, TokenType } from "./Tokenizer";
 import { CompileError, SyntaxError } from "./utils/errors";
 
 export enum ErrorType {

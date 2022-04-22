@@ -1,6 +1,6 @@
-import { ErrorType } from "../Braingoat";
-import { Emitter } from "../Components/Emitter";
-import { LineType, TokenType } from "../Components/Tokenizer";
+import { ErrorType } from "../../Braingoat";
+import { Emitter } from "..";
+import { LineType, TokenType } from "../../Tokenizer";
 
 export type memoryPositionType = [number, number];
 

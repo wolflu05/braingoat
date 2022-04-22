@@ -1,6 +1,6 @@
-import { Emitter } from "../Components/Emitter";
-import { LineType, TokenType } from "../Components/Tokenizer";
-import { BasicDataType, memoryPositionType } from "../Types/BasicDataType";
+import { Emitter } from "..";
+import { LineType, TokenType } from "../../Tokenizer";
+import { BasicDataType, memoryPositionType } from "../AbstractDataTypes/BasicDataType";
 
 export type IntCast = number | string | Int;
 

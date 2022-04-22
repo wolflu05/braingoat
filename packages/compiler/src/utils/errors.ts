@@ -1,23 +1,25 @@
-import { LineType } from "../Components/Tokenizer";
+import { LineType } from "../Tokenizer";
 
-export class SyntaxError extends Error {
+export class BraingoatError extends Error {
   source: LineType;
 
   constructor(message: string, stack: string, source: LineType) {
     super(message);
-    this.name = "SyntaxError";
     this.stack = stack;
     this.source = source;
   }
 }
 
-export class CompileError extends Error {
-  source: LineType;
-
+export class SyntaxError extends BraingoatError {
   constructor(message: string, stack: string, source: LineType) {
-    super(message);
+    super(message, stack, source);
+    this.name = "SyntaxError";
+  }
+}
+
+export class CompileError extends BraingoatError {
+  constructor(message: string, stack: string, source: LineType) {
+    super(message, stack, source);
     this.name = "CompileError";
-    this.stack = stack;
-    this.source = source;
   }
 }
