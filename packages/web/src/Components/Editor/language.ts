@@ -1,6 +1,6 @@
-import monaco from "monaco-editor";
+import { languages, editor } from "monaco-editor";
 
-export const BRAINGOAT_FORMAT: monaco.languages.IMonarchLanguage = {
+export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
   defaultToken: "invalid",
   tokenPostfix: ".js",
 
@@ -52,20 +52,27 @@ export const BRAINGOAT_FORMAT: monaco.languages.IMonarchLanguage = {
 
     whitespace: [
       [/[ \t\r\n]+/, ""],
-      // [/\/\*\*(?!\/)/, "comment.doc", "@jsdoc"],
-      // [/\/\*/, "comment", "@comment"],
-      // [/\/\/.*$/, "comment"],
+      [/\/\*.*\*\//, "comment"],
     ],
-
-    // comment: [
-    //   [/[^/*]+/, "comment"],
-    //   [/\*\//, "comment", "@pop"],
-    //   [/[/*]/, "comment"],
-    // ],
   },
 };
 
-export const BRAINGOAT_THEME: monaco.editor.IStandaloneThemeData = {
+export const BRAINGOAT_LANGUAGE_CONFIGURATION: languages.LanguageConfiguration = {
+  surroundingPairs: [
+    { open: "{", close: "}" },
+    { open: "[", close: "]" },
+    { open: "(", close: ")" },
+    { open: "<", close: ">" },
+  ],
+  autoClosingPairs: [
+    { open: "{", close: "}" },
+    { open: "[", close: "]" },
+    { open: "(", close: ")" },
+    { open: "<", close: ">" },
+  ],
+};
+
+export const BRAINGOAT_THEME: editor.IStandaloneThemeData = {
   base: "vs-dark",
   inherit: false,
   rules: [
@@ -78,6 +85,7 @@ export const BRAINGOAT_THEME: monaco.editor.IStandaloneThemeData = {
     { token: "brackets.variableOptions", foreground: "#FF966C" },
     { token: "brackets.expression", foreground: "#C3E88D" },
     { token: "brackets.block", foreground: "#FFC777" },
+    { token: "comment", foreground: "#7A88CF" },
   ],
   colors: {
     "editor.foreground": "#eeeeee",
@@ -85,10 +93,60 @@ export const BRAINGOAT_THEME: monaco.editor.IStandaloneThemeData = {
   },
 };
 
+export const BRAINGOAT_COMPLETION: languages.CompletionItemProvider = {
+  provideCompletionItems(model, position) {
+    const word = model.getWordUntilPosition(position);
+    const range = {
+      startLineNumber: position.lineNumber,
+      endLineNumber: position.lineNumber,
+      startColumn: word.startColumn,
+      endColumn: word.endColumn,
+    };
+
+    return {
+      suggestions: [
+        {
+          label: "comment",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "/* ${1:comment} */",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+        {
+          label: "Int",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "Int ${1:name} = ${2:value}",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+        {
+          label: "IntList",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "IntList<${1:len}> ${2:name} = [${3:values}]",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+        {
+          label: "print",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "print(${1:expression})",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+      ],
+    };
+  },
+};
+
 export const TESTING_CODE = `
 Int a = 234
 Int b = 324
 
+/* This is a very cool list */
 IntList<3> l = [1,(a + (b * 1)),3]
 
 Int c = (a *b)
@@ -97,10 +155,4 @@ c = (a == b)
 c = (b != a)
 
 print(c)
-
-if(a) {
-  input(d, (a != (b +1)))
-} else {
-  print(a, (a * b))
-}
 `;

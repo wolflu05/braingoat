@@ -1,7 +1,13 @@
 import { editor, MarkerSeverity } from "monaco-editor";
 import MonacoEditor, { BeforeMount, Monaco, OnChange, OnMount } from "@monaco-editor/react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import { BRAINGOAT_FORMAT, BRAINGOAT_THEME, TESTING_CODE } from "./language";
+import {
+  BRAINGOAT_COMPLETION,
+  BRAINGOAT_FORMAT,
+  BRAINGOAT_LANGUAGE_CONFIGURATION,
+  BRAINGOAT_THEME,
+  TESTING_CODE,
+} from "./language";
 
 interface EditorProps {
   onChange: OnChange;
@@ -14,6 +20,8 @@ const Editor = forwardRef(({ onChange }: EditorProps, ref) => {
   const handleEditorWillMount: BeforeMount = useCallback((monaco) => {
     monaco.languages.register({ id: "braingoat" });
     monaco.languages.setMonarchTokensProvider("braingoat", BRAINGOAT_FORMAT);
+    monaco.languages.setLanguageConfiguration("braingoat", BRAINGOAT_LANGUAGE_CONFIGURATION);
+    monaco.languages.registerCompletionItemProvider("braingoat", BRAINGOAT_COMPLETION);
     monaco.editor.defineTheme("braingoat-dark", BRAINGOAT_THEME);
   }, []);
 
