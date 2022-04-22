@@ -26,7 +26,7 @@ export class Braingoat {
     return this;
   }
 
-  throwError(type: ErrorType, message: string, token: TokenType | LineType): never {
+  throwError(type: ErrorType, message: string, token?: TokenType | LineType): never {
     if (!token) token = { startLine: 0, startCol: 0, endLine: 0, endCol: 0 };
     let source;
     if ("source" in token) {

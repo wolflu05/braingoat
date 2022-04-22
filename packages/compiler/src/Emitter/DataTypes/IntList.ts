@@ -1,11 +1,12 @@
 import { ErrorType } from "../../Braingoat";
 import { Emitter } from "..";
 import { LineType, TokenType } from "../../Tokenizer";
-import { BasicDataType, memoryPositionType } from "../AbstractDataTypes/BasicDataType";
+import { memoryPositionType } from "../AbstractDataTypes/BasicDataType";
 import { Int } from "./Int";
+import { listIndexType, ListType } from "../AbstractDataTypes/ListType";
 
 const TMP_CELLS = 4;
-export class IntList extends BasicDataType {
+export class IntList extends ListType {
   length: number | any;
   array: Int[];
   tmpCells: Int[];
@@ -18,27 +19,10 @@ export class IntList extends BasicDataType {
     addToMemory = true,
     position?: memoryPositionType,
   ) {
-    super(emitter, name, variableOptions, source);
-
-    if (!this.variableOptions) {
-      this.emitter.braingoat.throwError(
-        ErrorType.CompileError,
-        `IntList expected length as variable options`,
-        this.source,
-      );
-    }
-
-    if (Number.isNaN(+this.variableOptions.value)) {
-      this.emitter.braingoat.throwError(
-        ErrorType.CompileError,
-        `${this.variableOptions.value} is no valid length`,
-        this.variableOptions.source,
-      );
-    }
-
-    this.length = +this.variableOptions.value;
+    super(emitter, name, variableOptions, source, addToMemory, position);
     this.array = [];
     this.tmpCells = [];
+
     this.allocate(addToMemory, position);
   }
 
@@ -83,7 +67,7 @@ export class IntList extends BasicDataType {
     }
   }
 
-  getItem(idxVariable: Int | number) {
+  getItem(idxVariable: listIndexType) {
     if (idxVariable instanceof Int) {
       this.resetTmpCells();
 
@@ -126,7 +110,7 @@ export class IntList extends BasicDataType {
     }
   }
 
-  setItem(idxVariable: Int | number, value: Int | number) {
+  setItem(idxVariable: listIndexType, value: Int | number) {
     if (idxVariable instanceof Int) {
       this.resetTmpCells();
 

@@ -50,11 +50,11 @@ export type EXPRESSION_OPTIONS = {
 
 export type VALUE_LITERAL_OPTIONS =
   | {
-      type: "INT";
+      type: "NUMBER";
       value: number;
     }
   | {
-      type: "INTLIST";
+      type: "LIST";
       value: AST[];
     };
 export type VARIABLE_LITERAL_OPTIONS = {
@@ -161,9 +161,12 @@ export class AST {
       ];
     }
 
-    // INT Value literal
+    // NUMBER Value literal
     if (!Number.isNaN(+token.value)) {
-      return [new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "INT", value: +token.value }, token.source), startIndex + 1];
+      return [
+        new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "NUMBER", value: +token.value }, token.source),
+        startIndex + 1,
+      ];
     }
 
     // Array Value literal
@@ -198,7 +201,7 @@ export class AST {
         }
       }
 
-      return [new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "INTLIST", value: values }, token.source), k];
+      return [new AST(TOKEN_TYPES.VALUE_LITERAL, { type: "LIST", value: values }, token.source), k];
     }
 
     // Variable literal

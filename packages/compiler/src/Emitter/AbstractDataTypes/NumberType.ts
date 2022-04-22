@@ -1,0 +1,36 @@
+import { BasicDataType } from "./BasicDataType";
+
+export abstract class NumberType extends BasicDataType {
+  set(variable: NumberType | number) {
+    this.throwNotImplemented("set");
+  }
+
+  add(variable: NumberType) {
+    this.throwNotImplemented("add");
+  }
+
+  subtract(variable: NumberType) {
+    this.throwNotImplemented("subtract");
+  }
+
+  multiply(variable: NumberType) {
+    this.throwNotImplemented("multiply");
+  }
+
+  divide(variable: NumberType) {
+    this.throwNotImplemented("divide");
+  }
+
+  power(variable: NumberType) {
+    this.throwNotImplemented("power");
+  }
+
+  // compare operations
+  eq(variable: NumberType) {
+    this.throwNotImplemented("eq");
+  }
+
+  neq(variable: NumberType) {
+    this.throwNotImplemented("neq");
+  }
+}

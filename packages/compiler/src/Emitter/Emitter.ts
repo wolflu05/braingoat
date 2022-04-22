@@ -1,7 +1,5 @@
 import { Braingoat, ErrorType } from "../Braingoat";
 import { DataTypes } from "./DataTypes";
-import { Int } from "./DataTypes/Int";
-import { IntList } from "./DataTypes/IntList";
 import { Functions } from "./Functions";
 import { BasicDataType, memoryPositionType } from "./AbstractDataTypes/BasicDataType";
 import { isValidVariableName } from "../utils";
@@ -18,6 +16,8 @@ import {
   VARIABLE_LITERAL_OPTIONS,
 } from "../AST";
 import { LineType, TokenType } from "../Tokenizer";
+import { NumberType } from "./AbstractDataTypes/NumberType";
+import { listIndexType, ListType } from "./AbstractDataTypes/ListType";
 
 export class Emitter {
   memoryAllocation: BasicDataType[];
@@ -39,13 +39,13 @@ export class Emitter {
     if (expression.type === TOKEN_TYPES.VALUE_LITERAL) {
       const tokenOptions = expression.tokenOptions as VALUE_LITERAL_OPTIONS;
 
-      // INT
-      if (variable instanceof DataTypes.Int && tokenOptions.type === "INT") {
+      // Number
+      if (variable instanceof NumberType && tokenOptions.type === "NUMBER") {
         variable.set(tokenOptions.value);
       }
 
-      // INTLIST
-      else if (variable instanceof DataTypes.IntList && tokenOptions.type === "INTLIST") {
+      // List
+      else if (variable instanceof ListType && tokenOptions.type === "LIST") {
         if (variable.length !== tokenOptions.value.length) {
           this.braingoat.throwError(
             ErrorType.CompileError,
@@ -54,7 +54,7 @@ export class Emitter {
           );
         }
 
-        const valueVar = new Int(this, null, null, expression.source);
+        const valueVar = new DataTypes.Int(this, null, null, expression.source);
         for (const [idx, value] of Object.entries(tokenOptions.value)) {
           this.emitExpression(valueVar, value);
           variable.setItem(+idx, valueVar);
@@ -77,31 +77,39 @@ export class Emitter {
       const tokenOptions = expression.tokenOptions as VARIABLE_LITERAL_OPTIONS;
       const variableLiteral = this.getVariable(tokenOptions.name, expression.source);
 
-      // INT
-      if (variable instanceof DataTypes.Int && variableLiteral instanceof DataTypes.Int) {
+      // Number
+      if (
+        variable instanceof NumberType &&
+        variableLiteral instanceof NumberType &&
+        variableLiteral.constructor === variable.constructor
+      ) {
         variable.set(variableLiteral);
       }
 
-      // INTLIST
-      else if (variable instanceof DataTypes.IntList && variableLiteral instanceof DataTypes.IntList) {
-        this.braingoat.throwError(ErrorType.CompileError, `Not implemented to copy another list`, expression.source);
+      // List
+      else if (
+        variable instanceof ListType &&
+        variableLiteral instanceof ListType &&
+        variableLiteral.constructor === variable.constructor
+      ) {
+        variable.set(variableLiteral);
       }
 
-      // Get INTLIST by Index
+      // Get LIST by Index
       else if (variable instanceof DataTypes.Int && tokenOptions.index) {
-        let idxVar: number | Int;
+        let idxVar: listIndexType;
         if (
           tokenOptions.index.type === TOKEN_TYPES.VALUE_LITERAL &&
           !Number.isNaN(+(tokenOptions.index.tokenOptions as VALUE_LITERAL_OPTIONS).value)
         ) {
           idxVar = +(tokenOptions.index.tokenOptions as VALUE_LITERAL_OPTIONS).value;
         } else {
-          idxVar = new Int(this, null, null, tokenOptions.index.source);
+          idxVar = new DataTypes.Int(this, null, null, tokenOptions.index.source);
           this.emitExpression(idxVar, tokenOptions.index);
         }
 
         const variableByIdx = this.getVariable(tokenOptions.name, expression.source, idxVar);
-        if (!(variableByIdx instanceof Int)) {
+        if (!(variableByIdx instanceof DataTypes.Int)) {
           this.braingoat.throwError(
             ErrorType.CompileError,
             `${variableByIdx.constructor.name} is no Int and cannot be used as index`,
@@ -110,7 +118,7 @@ export class Emitter {
         }
         variable.set(variableByIdx);
         variableByIdx.destroy();
-        if (idxVar instanceof Int) idxVar.destroy();
+        if (idxVar instanceof DataTypes.Int) idxVar.destroy();
       }
 
       // No valid combination
@@ -127,9 +135,10 @@ export class Emitter {
     else if (expression.type === TOKEN_TYPES.EXPRESSION) {
       const tokenOptions = expression.tokenOptions as EXPRESSION_OPTIONS;
 
-      if (variable instanceof DataTypes.Int) {
-        const leftVar = new Int(this, null, null, expression.source);
-        const rightVar = new Int(this, null, null, expression.source);
+      if (variable instanceof NumberType) {
+        // TODO
+        const leftVar = new DataTypes.Int(this, null, null, expression.source);
+        const rightVar = new DataTypes.Int(this, null, null, expression.source);
         this.emitExpression(leftVar, tokenOptions.leftNode);
         this.emitExpression(rightVar, tokenOptions.rightNode);
 
@@ -183,23 +192,23 @@ export class Emitter {
         const { variableName, value, index } = node.tokenOptions as ASSIGNMENT_OPTIONS;
         const variable = this.getVariable(variableName, node.source);
 
-        if (index && variable instanceof IntList) {
-          let idxVar: number | Int;
+        if (index && variable instanceof ListType) {
+          let idxVar: listIndexType;
           if (
             index.type === TOKEN_TYPES.VALUE_LITERAL &&
             !Number.isNaN(+(index.tokenOptions as VALUE_LITERAL_OPTIONS).value)
           ) {
             idxVar = +(index.tokenOptions as VALUE_LITERAL_OPTIONS).value;
           } else {
-            idxVar = new Int(this, null, null, index.source);
+            idxVar = new DataTypes.Int(this, null, null, index.source);
             this.emitExpression(idxVar, index);
           }
 
-          const valueVar = new Int(this, null, null, node.source);
+          const valueVar = new DataTypes.Int(this, null, null, node.source);
           this.emitExpression(valueVar, value);
           variable.setItem(idxVar, valueVar);
 
-          if (idxVar instanceof Int) idxVar.destroy();
+          if (idxVar instanceof DataTypes.Int) idxVar.destroy();
           valueVar.destroy();
         } else {
           this.emitExpression(variable, value);
@@ -261,7 +270,7 @@ export class Emitter {
     return variable;
   }
 
-  getVariable(name: string | BasicDataType, source: LineType, index?: number | Int): BasicDataType | never {
+  getVariable(name: string | BasicDataType, source: LineType, index?: listIndexType): BasicDataType | never {
     if (name instanceof BasicDataType) {
       return name;
     }
@@ -272,7 +281,7 @@ export class Emitter {
       this.braingoat.throwError(ErrorType.CompileError, `Variable ${name} is not defined`, source);
     }
 
-    if (index !== undefined && variable instanceof IntList) {
+    if (index !== undefined && variable instanceof ListType) {
       return variable.getItem(index);
     }
 
@@ -287,19 +296,21 @@ export class Emitter {
     Functions[name as keyof typeof Functions](this, args, block, source);
   }
 
-  codeBuilder(code: TemplateStringsArray, ...variables: ReadonlyArray<string | number | Int | Function>) {
+  codeBuilder(code: TemplateStringsArray, ...variables: ReadonlyArray<string | number | BasicDataType | Function>) {
     code.forEach((c, i) => {
       this.addCode(c);
 
       if (variables[i]) {
-        if (typeof variables[i] === "string") {
-          this.addCode(variables[i] as string);
-        } else if (typeof variables[i] === "number") {
-          this.addCode(this.movePointerTo(variables[i] as number, false));
-        } else if (variables[i] instanceof Int) {
-          this.addCode(this.movePointerTo((variables[i] as Int).position[0], false));
-        } else if (typeof variables[i] === "function") {
-          this.addCode((variables[i] as Function)());
+        const variable = variables[i];
+
+        if (typeof variable === "string") {
+          this.addCode(variable);
+        } else if (typeof variable === "number") {
+          this.addCode(this.movePointerTo(variable, false));
+        } else if (variable instanceof BasicDataType) {
+          this.addCode(this.movePointerTo(variable.getPosition(), false));
+        } else if (typeof variable === "function") {
+          this.addCode(variable());
         }
       }
     });

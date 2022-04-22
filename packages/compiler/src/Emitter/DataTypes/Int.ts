@@ -1,10 +1,11 @@
 import { Emitter } from "..";
 import { LineType, TokenType } from "../../Tokenizer";
-import { BasicDataType, memoryPositionType } from "../AbstractDataTypes/BasicDataType";
+import { memoryPositionType } from "../AbstractDataTypes/BasicDataType";
+import { NumberType } from "../AbstractDataTypes/NumberType";
 
 export type IntCast = number | string | Int;
 
-export class Int extends BasicDataType {
+export class Int extends NumberType {
   constructor(
     emitter: Emitter,
     name: string | null,
@@ -26,6 +27,10 @@ export class Int extends BasicDataType {
     }
 
     if (addToMemory) this.emitter.memoryAllocation.push(this);
+  }
+
+  getPosition() {
+    return this.position[0];
   }
 
   reset() {
