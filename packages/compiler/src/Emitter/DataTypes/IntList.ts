@@ -149,4 +149,12 @@ export class IntList extends ListType {
       this.array[idxVariable].set(value);
     }
   }
+
+  print() {
+    this.emitter.codeBuilder`
+      ${this.array[0]}
+      ${".>".repeat(this.length)}
+      ${"<".repeat(this.length)}
+    `;
+  }
 }

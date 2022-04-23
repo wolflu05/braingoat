@@ -67,4 +67,8 @@ export abstract class BasicDataType {
   set(variable: BasicDataType | any) {
     this.throwNotImplemented("set");
   }
+
+  print() {
+    this.throwNotImplemented("print");
+  }
 }

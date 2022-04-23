@@ -72,6 +72,10 @@ export class Int extends NumberType {
     }
   }
 
+  print() {
+    this.emitter.codeBuilder`${this}.`;
+  }
+
   // math operations
   add(variable: Int) {
     const tmp = variable.clone();
