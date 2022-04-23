@@ -4,6 +4,7 @@ import Editor, { EditorHandle } from "./Components/Editor/Editor";
 import Layout from "./Components/Layout/Layout";
 import { Braingoat } from "@braingoat/compiler";
 import useDebounce from "./hooks/useDebounce";
+import { TESTING_CODE } from "./Components/Editor/language";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -24,8 +25,11 @@ function App() {
     // local storage
     else {
       const code = localStorage.getItem("code");
+
       if (code) {
         setEditorValue(Buffer.from(code, "base64").toString("utf-8"));
+      } else {
+        setEditorValue(TESTING_CODE);
       }
     }
 
@@ -33,7 +37,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("code", Buffer.from(debouncedEditorValue, "utf-8").toString("base64"));
+    if (debouncedEditorValue) {
+      localStorage.setItem("code", Buffer.from(debouncedEditorValue, "utf-8").toString("base64"));
+    }
   }, [debouncedEditorValue]);
 
   const handleChange = useCallback<OnChange>((value) => {
