@@ -155,6 +155,14 @@ export class Emitter {
           leftVar.eq(rightVar);
         } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.NEQ) {
           leftVar.neq(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.LT) {
+          leftVar.lt(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.LTE) {
+          leftVar.lte(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.GT) {
+          leftVar.gt(rightVar);
+        } else if (tokenOptions.op === EXPRESSION_OPERATOR_TYPE.GTE) {
+          leftVar.gte(rightVar);
         }
 
         variable.set(leftVar);

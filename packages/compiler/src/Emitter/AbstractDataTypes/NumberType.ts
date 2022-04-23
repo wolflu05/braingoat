@@ -33,4 +33,20 @@ export abstract class NumberType extends BasicDataType {
   neq(variable: NumberType) {
     this.throwNotImplemented("neq");
   }
+
+  lt(variable: NumberType) {
+    this.throwNotImplemented("lt");
+  }
+
+  lte(variable: NumberType) {
+    this.throwNotImplemented("lte");
+  }
+
+  gt(variable: NumberType) {
+    this.throwNotImplemented("gt");
+  }
+
+  gte(variable: NumberType) {
+    this.throwNotImplemented("gte");
+  }
 }

@@ -16,7 +16,26 @@ export type TokenType = {
 export class Tokenizer {
   static tokenize(code: string[]) {
     const tokens: TokenType[] = [];
-    const splitters = [" ", "(", ")", "{", "}", "[", "]", ",", "<", ">", "/*", "*/", ...Object.keys(OPERATOR_MAP), "="];
+
+    const splitters = [
+      " ",
+      "(",
+      ")",
+      "{",
+      "}",
+      "[",
+      "]",
+      ",",
+      "<",
+      ">",
+      "=",
+      "/*",
+      "*/",
+      "\n",
+      "\r",
+      "\n\r",
+      ...Object.keys(OPERATOR_MAP),
+    ].sort((a, b) => b.length - a.length);
 
     for (const [lineNum, line] of Object.entries(code)) {
       const re = generateSplitRegex(splitters);
@@ -62,6 +81,6 @@ export class Tokenizer {
       });
     }
 
-    return tokens.filter((token) => !["", " ", "\n"].includes(token.value));
+    return tokens.filter((token) => !["", " ", "\n", "\r", "\n\r"].includes(token.value));
   }
 }

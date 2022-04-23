@@ -163,4 +163,64 @@ export class Int extends NumberType {
     const y = variable.clone();
     this.emitter.codeBuilder`${x}[${y}-${x}-]${y}[[-]${x}+${y}]`;
   }
+
+  lt(variable: Int) {
+    const pos = this.emitter.getNextNEmpty(5);
+    const array = Array.from({ length: 5 }).map(
+      (_, i) => new Int(this.emitter, null, null, this.source, true, [pos[0] + i, pos[0] + i]),
+    );
+    const [x, y, tmp0, tmp1] = array;
+    x.set(this);
+    y.set(variable);
+
+    this.emitter.codeBuilder`
+      ${tmp0}[-]
+      ${tmp1}[-] >[-]+ >[-] <<
+      ${y}[${tmp0}+ ${tmp1}+ ${y}-]
+      ${tmp0}[${y}+ ${tmp0}-]
+      ${x}[${tmp0}+ ${x}-]+
+      ${tmp1}[>-]> [< ${x}- ${tmp0}[-] ${tmp1}>->]<+<
+      ${tmp0}[${tmp1}- [>-]> [< ${x}- ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
+    `;
+
+    this.set(x);
+    array.map((v) => v.destroy());
+  }
+
+  lte(variable: Int) {
+    const pos = this.emitter.getNextNEmpty(5);
+    const array = Array.from({ length: 5 }).map(
+      (_, i) => new Int(this.emitter, null, null, this.source, true, [pos[0] + i, pos[0] + i]),
+    );
+    const [x, y, tmp0, tmp1] = array;
+    x.set(this);
+    y.set(variable);
+
+    this.emitter.codeBuilder`
+      ${tmp0}[-]
+      ${tmp1}[-] >[-]+ >[-] <<
+      ${y}[${tmp0}+ ${tmp1}+ ${y}-]
+      ${tmp1}[${y}+ ${tmp1}-]
+      ${x}[${tmp1}+ ${x}-]
+      ${tmp1}[>-]> [< ${x}+ ${tmp0}[-] ${tmp1}>->]<+<
+      ${tmp0}[${tmp1}- [>-]> [< ${x}+ ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
+    `;
+
+    this.set(x);
+    array.map((v) => v.destroy());
+  }
+
+  gt(variable: Int) {
+    const x = variable.clone();
+    x.lt(this);
+    this.set(x);
+    x.destroy();
+  }
+
+  gte(variable: Int) {
+    const x = variable.clone();
+    x.lte(this);
+    this.set(x);
+    x.destroy();
+  }
 }

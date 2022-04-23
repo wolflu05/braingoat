@@ -1,3 +1,6 @@
+import { OPERATOR_MAP } from "@braingoat/compiler/src/AST";
+import { DataTypes } from "@braingoat/compiler/src/Emitter/DataTypes";
+import { Functions } from "@braingoat/compiler/src/Emitter/Functions";
 import { languages, editor } from "monaco-editor";
 
 export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
@@ -5,9 +8,9 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
   tokenPostfix: ".js",
 
   keywords: ["if", "else"],
-  functions: ["print", "input"],
-  typeKeywords: ["Int", "IntList"],
-  operators: ["+", "-", "*", "/", "^", "==", "!="],
+  functions: Object.keys(Functions),
+  typeKeywords: Object.keys(DataTypes),
+  operators: Object.keys(OPERATOR_MAP),
 
   symbols: /[=><!~?:&|+\-*/^%]+/,
 
@@ -32,10 +35,6 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
       { include: "@whitespace" },
 
       // delimiters and operators
-      [/[[\]]/, "brackets.index"],
-      [/[<>]/, "brackets.variableOptions"],
-      [/[()]/, "brackets.expression"],
-      [/[{}]/, "brackets.block"],
       [
         /@symbols/,
         {
@@ -45,6 +44,10 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
           },
         },
       ],
+      [/[[\]]/, "brackets.index"],
+      [/<.*>/, "brackets.variableOptions"],
+      [/[()]/, "brackets.expression"],
+      [/[{}]/, "brackets.block"],
 
       // numbers
       [/\d+/, "number"],
