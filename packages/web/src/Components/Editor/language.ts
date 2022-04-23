@@ -7,7 +7,7 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
   defaultToken: "invalid",
   tokenPostfix: ".js",
 
-  keywords: ["if", "else"],
+  keywords: ["if", "else", "while"],
   functions: Object.keys(Functions),
   typeKeywords: Object.keys(DataTypes),
   operators: Object.keys(OPERATOR_MAP),

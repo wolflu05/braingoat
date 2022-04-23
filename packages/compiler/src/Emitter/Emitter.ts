@@ -181,8 +181,8 @@ export class Emitter {
     }
   }
 
-  emit() {
-    for (const node of this.ast) {
+  emit(ast?: AST[]) {
+    for (const node of ast || this.ast) {
       // VARIABLE DECLARATION
       if (node.type === TOKEN_TYPES.DECLARATION) {
         const { type, variableName, value, variableOptions } = node.tokenOptions as DECLARATION_OPTIONS;
