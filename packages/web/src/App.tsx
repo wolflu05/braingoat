@@ -1,13 +1,13 @@
 import { OnChange } from "@monaco-editor/react";
 import { useCallback, useRef, useState } from "react";
-import Editor from "./Components/Editor/Editor";
+import Editor, { EditorHandle } from "./Components/Editor/Editor";
 import Layout from "./Components/Layout/Layout";
 import { Braingoat } from "@braingoat/compiler";
 
 function App() {
   const [code, setCode] = useState("");
   const [compiledCode, setCompiledCode] = useState("");
-  const editor = useRef<any>();
+  const editor = useRef<EditorHandle>(null);
 
   const handleChange = useCallback<OnChange>((value) => {
     if (!value) return;
@@ -21,9 +21,9 @@ function App() {
     try {
       braingoat.compile();
       setCompiledCode(braingoat.bfCode);
-      editor.current.clearError();
+      editor.current?.clearError();
     } catch (error: any) {
-      editor.current.setError(error);
+      editor.current?.setError(error);
       setCompiledCode(error?.stack || error);
     }
   }, [code]);

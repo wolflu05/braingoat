@@ -9,11 +9,16 @@ import {
   TESTING_CODE,
 } from "./language";
 
-interface EditorProps {
+export interface EditorProps {
   onChange: OnChange;
 }
 
-const Editor = forwardRef(({ onChange }: EditorProps, ref) => {
+export interface EditorHandle {
+  setError(error: any): void;
+  clearError(): void;
+}
+
+const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange }, ref) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const monacoRef = useRef<Monaco>();
   const modelRef = useRef<editor.ITextModel | null>();

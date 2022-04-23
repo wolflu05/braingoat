@@ -178,11 +178,7 @@ export class AST {
           braingoat.throwError(ErrorType.SyntaxError, `Unexpected token , expected list item`, tokens[k]);
         }
 
-        const nextIndex = findIndexAt(
-          k + 1,
-          tokens,
-          (t) => (t as TokenType).value === "," || (t as TokenType).value === "]",
-        );
+        const nextIndex = findIndexAt(k + 1, tokens, (t) => t.value === "," || t.value === "]");
 
         if (nextIndex === -1) {
           braingoat.throwError(ErrorType.SyntaxError, `Expected ]`, tokens[tokens.length - 1]);
@@ -234,7 +230,7 @@ export class AST {
 
       // COMMENTS
       if (tokens[i].value === "/*") {
-        const endingIndex = findIndexAt(i + 1, tokens, (t) => (t as TokenType).value === "*/");
+        const endingIndex = findIndexAt(i + 1, tokens, (t) => t.value === "*/");
         if (endingIndex === -1) {
           braingoat.throwError(ErrorType.SyntaxError, "Expected */", tokens[tokens.length - 1]);
         }

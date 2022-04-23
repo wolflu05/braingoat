@@ -2,7 +2,7 @@ import { Braingoat, ErrorType } from "../Braingoat";
 import { DataTypes } from "./DataTypes";
 import { Functions } from "./Functions";
 import { BasicDataType, memoryPositionType } from "./AbstractDataTypes/BasicDataType";
-import { isValidVariableName } from "../utils";
+import { createDataType, isValidVariableName } from "../utils";
 import { COMMANDS, VALID_CHARS } from "../utils/commands";
 import {
   ASSIGNMENT_OPTIONS,
@@ -136,9 +136,8 @@ export class Emitter {
       const tokenOptions = expression.tokenOptions as EXPRESSION_OPTIONS;
 
       if (variable instanceof NumberType) {
-        // TODO
-        const leftVar = new DataTypes.Int(this, null, null, expression.source);
-        const rightVar = new DataTypes.Int(this, null, null, expression.source);
+        const leftVar = createDataType(variable, this, null, null, expression.source);
+        const rightVar = createDataType(variable, this, null, null, expression.source);
         this.emitExpression(leftVar, tokenOptions.leftNode);
         this.emitExpression(rightVar, tokenOptions.rightNode);
 

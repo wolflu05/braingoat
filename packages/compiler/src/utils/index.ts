@@ -1,4 +1,5 @@
 import { Braingoat, ErrorType } from "../Braingoat";
+import { BasicDataType } from "../Emitter/AbstractDataTypes/BasicDataType";
 import { TokenType } from "../Tokenizer";
 
 export const escapeRegexStr = (str: string) => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -16,7 +17,7 @@ export const splitByChars = (str: string, delimiters: string[]) => {
   return splitted;
 };
 
-export const findIndexAt = (idx: number, arr: any[], func: (item: any) => boolean) => {
+export const findIndexAt = <T>(idx: number, arr: T[], func: (item: T) => boolean) => {
   for (let i = idx; i < arr.length; i++) {
     if (func(arr[i])) {
       return i;
@@ -83,4 +84,12 @@ export const findMatchingBracket = (
   }
 
   return i - 1;
+};
+
+export const createDataType = <T extends BasicDataType>(
+  dataType: T,
+  ...args: ConstructorParameters<typeof BasicDataType>
+) => {
+  const dataTypeConstructor = dataType.constructor as new (...args: ConstructorParameters<typeof BasicDataType>) => T;
+  return new dataTypeConstructor(...args);
 };
