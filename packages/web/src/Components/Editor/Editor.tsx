@@ -1,16 +1,11 @@
 import { editor, MarkerSeverity } from "monaco-editor";
 import MonacoEditor, { BeforeMount, Monaco, OnChange, OnMount } from "@monaco-editor/react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import {
-  BRAINGOAT_COMPLETION,
-  BRAINGOAT_FORMAT,
-  BRAINGOAT_LANGUAGE_CONFIGURATION,
-  BRAINGOAT_THEME,
-  TESTING_CODE,
-} from "./language";
+import { BRAINGOAT_COMPLETION, BRAINGOAT_FORMAT, BRAINGOAT_LANGUAGE_CONFIGURATION, BRAINGOAT_THEME } from "./language";
 
 export interface EditorProps {
   onChange: OnChange;
+  defaultValue: string;
 }
 
 export interface EditorHandle {
@@ -18,7 +13,7 @@ export interface EditorHandle {
   clearError(): void;
 }
 
-const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange }, ref) => {
+const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange, defaultValue }, ref) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const monacoRef = useRef<Monaco>();
   const modelRef = useRef<editor.ITextModel | null>();
@@ -66,7 +61,7 @@ const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange }, ref) => {
         height="60vh"
         defaultLanguage="braingoat"
         theme="braingoat-dark"
-        defaultValue={TESTING_CODE}
+        defaultValue={defaultValue}
         beforeMount={handleEditorWillMount}
         onMount={handleEditorMount}
         onChange={onChange}

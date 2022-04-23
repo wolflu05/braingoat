@@ -1,3 +1,5 @@
+const { ProvidePlugin } = require("webpack");
+
 module.exports = {
   webpack: {
     configure: webpackConfig => {
@@ -11,7 +13,11 @@ module.exports = {
           transpileOnly: true,
           configFile: 'tsconfig.json',
         },
-      })
+      });
+
+      webpackConfig.plugins.push(new ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      }));
 
       return webpackConfig;
     }
