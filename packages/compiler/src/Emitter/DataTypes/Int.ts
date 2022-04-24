@@ -76,6 +76,18 @@ export class Int extends NumberType {
     this.emitter.codeBuilder`${this}.`;
   }
 
+  printN() {
+    this.emitter.withIntArray(10, this.source, ([x]) => {
+      x.set(this);
+
+      this.emitter.codeBuilder`
+        ${x} >>++++++++++<<[->+>-[>+>>]>[+[-<+>]>+>>]<<<<<<]>>[-]>>>++++++++++<[->-[>+>>]>[+[-
+        <+>]>+>>]<<<<<]>[-]>>[>++++++[-<++++++++>]<.<<+>+>[-]]<[<[->-<]++++++[->++++++++
+        <]>.[-]]<<++++++[-<++++++++>]<.[-]<<[-<+>]<
+      `;
+    });
+  }
+
   // math operations
   add(variable: Int) {
     const tmp = variable.clone();
@@ -165,49 +177,41 @@ export class Int extends NumberType {
   }
 
   lt(variable: Int) {
-    const pos = this.emitter.getNextNEmpty(5);
-    const array = Array.from({ length: 5 }).map(
-      (_, i) => new Int(this.emitter, null, null, this.source, true, [pos[0] + i, pos[0] + i]),
-    );
-    const [x, y, tmp0, tmp1] = array;
-    x.set(this);
-    y.set(variable);
+    this.emitter.withIntArray(5, this.source, ([x, y, tmp0, tmp1]) => {
+      x.set(this);
+      y.set(variable);
 
-    this.emitter.codeBuilder`
-      ${tmp0}[-]
-      ${tmp1}[-] >[-]+ >[-] <<
-      ${y}[${tmp0}+ ${tmp1}+ ${y}-]
-      ${tmp0}[${y}+ ${tmp0}-]
-      ${x}[${tmp0}+ ${x}-]+
-      ${tmp1}[>-]> [< ${x}- ${tmp0}[-] ${tmp1}>->]<+<
-      ${tmp0}[${tmp1}- [>-]> [< ${x}- ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
-    `;
+      this.emitter.codeBuilder`
+        ${tmp0}[-]
+        ${tmp1}[-] >[-]+ >[-] <<
+        ${y}[${tmp0}+ ${tmp1}+ ${y}-]
+        ${tmp0}[${y}+ ${tmp0}-]
+        ${x}[${tmp0}+ ${x}-]+
+        ${tmp1}[>-]> [< ${x}- ${tmp0}[-] ${tmp1}>->]<+<
+        ${tmp0}[${tmp1}- [>-]> [< ${x}- ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
+      `;
 
-    this.set(x);
-    array.map((v) => v.destroy());
+      this.set(x);
+    });
   }
 
   lte(variable: Int) {
-    const pos = this.emitter.getNextNEmpty(5);
-    const array = Array.from({ length: 5 }).map(
-      (_, i) => new Int(this.emitter, null, null, this.source, true, [pos[0] + i, pos[0] + i]),
-    );
-    const [x, y, tmp0, tmp1] = array;
-    x.set(this);
-    y.set(variable);
+    this.emitter.withIntArray(5, this.source, ([x, y, tmp0, tmp1]) => {
+      x.set(this);
+      y.set(variable);
 
-    this.emitter.codeBuilder`
-      ${tmp0}[-]
-      ${tmp1}[-] >[-]+ >[-] <<
-      ${y}[${tmp0}+ ${tmp1}+ ${y}-]
-      ${tmp1}[${y}+ ${tmp1}-]
-      ${x}[${tmp1}+ ${x}-]
-      ${tmp1}[>-]> [< ${x}+ ${tmp0}[-] ${tmp1}>->]<+<
-      ${tmp0}[${tmp1}- [>-]> [< ${x}+ ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
-    `;
+      this.emitter.codeBuilder`
+        ${tmp0}[-]
+        ${tmp1}[-] >[-]+ >[-] <<
+        ${y}[${tmp0}+ ${tmp1}+ ${y}-]
+        ${tmp1}[${y}+ ${tmp1}-]
+        ${x}[${tmp1}+ ${x}-]
+        ${tmp1}[>-]> [< ${x}+ ${tmp0}[-] ${tmp1}>->]<+<
+        ${tmp0}[${tmp1}- [>-]> [< ${x}+ ${tmp0}[-]+ ${tmp1}>->]<+< ${tmp0}-]
+      `;
 
-    this.set(x);
-    array.map((v) => v.destroy());
+      this.set(x);
+    });
   }
 
   gt(variable: Int) {

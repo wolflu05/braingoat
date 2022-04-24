@@ -19,6 +19,7 @@ import {
 import { LineType, TokenType } from "../Tokenizer";
 import { NumberType } from "./AbstractDataTypes/NumberType";
 import { listIndexType, ListType } from "./AbstractDataTypes/ListType";
+import { Int } from "./DataTypes/Int";
 
 export class Emitter {
   memoryAllocation: BasicDataType[];
@@ -304,6 +305,7 @@ export class Emitter {
     Functions[name as keyof typeof Functions](this, args, block, source);
   }
 
+  // util functions
   codeBuilder(code: TemplateStringsArray, ...variables: ReadonlyArray<string | number | BasicDataType | Function>) {
     code.forEach((c, i) => {
       this.addCode(c);
@@ -330,5 +332,16 @@ export class Emitter {
       .split("")
       .filter((x) => VALID_CHARS.includes(x))
       .join("");
+  }
+
+  withIntArray(length: number, source: LineType, func: (variables: Array<Int>) => void) {
+    const pos = this.getNextNEmpty(length);
+    const variables = Array.from({ length: length }).map(
+      (_, i) => new Int(this, null, null, source, true, [pos[0] + i, pos[0] + i]),
+    );
+
+    func(variables);
+
+    variables.map((v) => v.destroy());
   }
 }

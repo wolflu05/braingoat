@@ -43,29 +43,24 @@ export const ifFunc = (emitter: Emitter, args: AST[], blocks: blockType[], sourc
 
   // if/else
   else {
-    const pos = emitter.getNextNEmpty(3);
-    const array = Array.from({ length: 3 }).map(
-      (_, i) => new Int(emitter, null, null, args[0].source, true, [pos[0] + i, pos[0] + i]),
-    );
-    const [x, tmp0] = array;
-    emitter.emitExpression(x, args[0]);
+    emitter.withIntArray(3, args[0].source, ([x, tmp0]) => {
+      emitter.emitExpression(x, args[0]);
 
-    emitter.codeBuilder`
-      ${tmp0}+
-      ${x}[
-        ${() => {
-          emitter.emit(blocks[0].block);
-        }}
+      emitter.codeBuilder`
+        ${tmp0}+
+        ${x}[
+          ${() => {
+            emitter.emit(blocks[0].block);
+          }}
 
-        ${x}>-]>
-      [<
-        ${() => {
-          emitter.emit(blocks[1].block);
-        }}
+          ${x}>-]>
+        [<
+          ${() => {
+            emitter.emit(blocks[1].block);
+          }}
 
-        ${x}>->]<<
-    `;
-
-    array.map((v) => v.destroy());
+          ${x}>->]<<
+      `;
+    });
   }
 };

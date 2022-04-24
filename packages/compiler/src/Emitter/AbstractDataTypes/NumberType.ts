@@ -5,6 +5,11 @@ export abstract class NumberType extends BasicDataType {
     this.throwNotImplemented("set");
   }
 
+  printN() {
+    this.throwNotImplemented("printN");
+  }
+
+  // math
   add(variable: NumberType) {
     this.throwNotImplemented("add");
   }
