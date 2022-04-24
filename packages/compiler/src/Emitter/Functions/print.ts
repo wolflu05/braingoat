@@ -1,16 +1,20 @@
 import { ErrorType } from "../../Braingoat";
-import { AST, TOKEN_TYPES, VARIABLE_LITERAL_OPTIONS } from "../../AST";
+import { AST, blockType, TOKEN_TYPES, VARIABLE_LITERAL_OPTIONS } from "../../AST";
 import { Emitter } from "..";
 import { LineType } from "../../Tokenizer";
 import { Int } from "../DataTypes/Int";
 
-export const print = (emitter: Emitter, args: AST[], block: AST[], source: LineType) => {
-  if (block.length !== 0) {
-    emitter.braingoat.throwError(ErrorType.CompileError, `print expected no block statement`, source);
+export const print = (emitter: Emitter, args: AST[], blocks: blockType[], source: LineType) => {
+  if (blocks.length !== 0) {
+    emitter.braingoat.throwError(
+      ErrorType.CompileError,
+      `print expected no block statement, got ${blocks.length}`,
+      source,
+    );
   }
 
   if (args.length !== 1) {
-    emitter.braingoat.throwError(ErrorType.CompileError, `print expected only 1 argument, got ${args.length}`, source);
+    emitter.braingoat.throwError(ErrorType.CompileError, `print expected 1 argument, got ${args.length}`, source);
   }
 
   if (args[0].type === TOKEN_TYPES.VARIABLE_LITERAL) {

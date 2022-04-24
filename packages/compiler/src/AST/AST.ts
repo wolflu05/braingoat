@@ -18,10 +18,11 @@ export type DECLARATION_OPTIONS = {
   variableOptions: TokenType | null;
 };
 
+export type blockType = { name: string; block: AST[] };
 export type FUNCTION_CALL_OPTIONS = {
   functionName: string;
   parameters: AST[];
-  block: AST[];
+  blocks: blockType[];
 };
 
 export enum EXPRESSION_OPERATOR_TYPE {
@@ -340,31 +341,27 @@ export class AST {
           k = nextArg + 1;
         }
 
-        let endTokenIndex = k;
+        nextIndex = k + 1;
 
-        // block function parsing
-        let block: TokenType[] = [];
-        if (tokens[endTokenIndex + 1]?.value === "{" && tokens.length > endTokenIndex + 2) {
-          const stack = [];
-          let k = endTokenIndex + 1;
+        const blocks: blockType[] = [];
+        let lastName = "default";
+        while (tokens[nextIndex]?.value === "{") {
+          const endingIndex = findMatchingBracket(tokens, braingoat, {
+            startIndex: nextIndex,
+            bracketMap: { "{": "}" },
+          });
 
-          for (; k < tokens.length; k++) {
-            if (tokens[k].value === "{") {
-              stack.push("{");
-            } else if (tokens[k].value === "}") {
-              stack.pop();
-            }
+          blocks.push({
+            name: lastName,
+            block: AST.parse(tokens.slice(nextIndex + 1, endingIndex), braingoat),
+          });
 
-            if (stack.length === 0) break;
-            block.push(tokens[k]);
+          if (tokens[endingIndex + 2]?.value === "{") {
+            lastName = tokens[endingIndex + 1].value;
+            nextIndex = endingIndex + 2;
+          } else {
+            nextIndex = endingIndex + 1;
           }
-          if (stack.length !== 0) {
-            braingoat.throwError(ErrorType.SyntaxError, "Expected }", tokens[k - 1]);
-          }
-
-          nextIndex = k + 1;
-        } else {
-          nextIndex = endTokenIndex + 1;
         }
 
         tree.push(
@@ -373,7 +370,7 @@ export class AST {
             {
               functionName: tokens[i].value,
               parameters: params,
-              block: AST.parse(block.slice(1), braingoat),
+              blocks: blocks,
             },
             tokens[i].source,
           ),

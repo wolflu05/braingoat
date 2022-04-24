@@ -32,6 +32,7 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
       ],
 
       // whitespace
+      { include: "@comment" },
       { include: "@whitespace" },
 
       // delimiters and operators
@@ -53,10 +54,14 @@ export const BRAINGOAT_FORMAT: languages.IMonarchLanguage = {
       [/\d+/, "number"],
     ],
 
-    whitespace: [
-      [/[ \t\r\n]+/, ""],
-      [/\/\*.*\*\//, "comment"],
+    // https://stackoverflow.com/questions/66278203/how-to-set-multiline-rule-in-monaco-editor
+    comment: [[/\/\*/, { token: "comment", next: "@commentClosing" }]],
+    commentClosing: [
+      [/[^*/]+/, { token: "comment" }],
+      [/\*\//, { token: "comment", next: "@pop" }],
     ],
+
+    whitespace: [[/[ \t\r\n]+/, ""]],
   },
 };
 
@@ -71,7 +76,6 @@ export const BRAINGOAT_LANGUAGE_CONFIGURATION: languages.LanguageConfiguration =
     { open: "{", close: "}" },
     { open: "[", close: "]" },
     { open: "(", close: ")" },
-    { open: "<", close: ">" },
   ],
 };
 
@@ -140,9 +144,37 @@ export const BRAINGOAT_COMPLETION: languages.CompletionItemProvider = {
           insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
           range,
         },
+        {
+          label: "while",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "while(${1:expression}) {\n  ${2:code}\n}\n",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+        {
+          label: "if",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "if(${1:expression}) {\n  ${2:code}\n}\n",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
+        {
+          label: "ifelse",
+          kind: languages.CompletionItemKind.Keyword,
+          // eslint-disable-next-line no-template-curly-in-string
+          insertText: "if(${1:expression}) {\n  ${2:code}\n} else {\n  ${3:code}\n}\n",
+          insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range,
+        },
       ],
     };
   },
+};
+
+export const BRAINGOAT_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
+  tabSize: 2,
 };
 
 export const TESTING_CODE = `

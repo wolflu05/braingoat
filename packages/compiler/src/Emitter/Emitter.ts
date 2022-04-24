@@ -7,6 +7,7 @@ import { COMMANDS, VALID_CHARS } from "../utils/commands";
 import {
   ASSIGNMENT_OPTIONS,
   AST,
+  blockType,
   DECLARATION_OPTIONS,
   EXPRESSION_OPERATOR_TYPE,
   EXPRESSION_OPTIONS,
@@ -224,8 +225,8 @@ export class Emitter {
 
       // FUNCTION CALL
       else if (node.type === TOKEN_TYPES.FUNCTION_CALL) {
-        const { functionName, parameters, block } = node.tokenOptions as FUNCTION_CALL_OPTIONS;
-        this.callFunction(functionName, parameters, block, node.source);
+        const { functionName, parameters, blocks } = node.tokenOptions as FUNCTION_CALL_OPTIONS;
+        this.callFunction(functionName, parameters, blocks, node.source);
       }
     }
 
@@ -295,7 +296,7 @@ export class Emitter {
     return variable;
   }
 
-  callFunction(name: string, args: AST[], block: AST[], source: LineType) {
+  callFunction(name: string, args: AST[], block: blockType[], source: LineType) {
     if (!(name in Functions)) {
       this.braingoat.throwError(ErrorType.CompileError, `${name} is no valid function`, source);
     }
