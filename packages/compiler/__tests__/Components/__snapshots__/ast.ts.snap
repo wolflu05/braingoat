@@ -3,8 +3,8 @@
 exports[`tokenize Function call with more { 1`] = `
 "
 
-             ^ L0:13-14
-             SyntaxError: Expected }"
+ L0:0-0
+SyntaxError: Expected tokens }"
 `;
 
 exports[`tokenize Function call without ending ) 1`] = `
@@ -17,8 +17,8 @@ SyntaxError: Expected tokens )"
 exports[`tokenize Function call without ending block } 1`] = `
 "
 
-           ^ L0:11-12
-           SyntaxError: Unprocessed keyword \\"{\\""
+ L0:0-0
+SyntaxError: Expected tokens }"
 `;
 
 exports[`tokenize Unprocessed keyword 1`] = `
@@ -47,7 +47,7 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [],
+      "blocks": Array [],
       "functionName": "abc",
       "parameters": Array [],
     },
@@ -66,7 +66,12 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [],
+      "blocks": Array [
+        Object {
+          "block": Array [],
+          "name": "default",
+        },
+      ],
       "functionName": "abc",
       "parameters": Array [],
     },
@@ -85,7 +90,7 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [],
+      "blocks": Array [],
       "functionName": "abc",
       "parameters": Array [
         AST {
@@ -118,7 +123,12 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [],
+      "blocks": Array [
+        Object {
+          "block": Array [],
+          "name": "default",
+        },
+      ],
       "functionName": "abc",
       "parameters": Array [
         AST {
@@ -151,7 +161,7 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [],
+      "blocks": Array [],
       "functionName": "abc",
       "parameters": Array [
         AST {
@@ -223,20 +233,30 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [
-        AST {
-          "source": Object {
-            "endCol": 4,
-            "endLine": 1,
-            "startCol": 2,
-            "startLine": 1,
-          },
-          "tokenOptions": Object {
-            "block": Array [],
-            "functionName": "abc",
-            "parameters": Array [],
-          },
-          "type": "FUNCTION_CALL",
+      "blocks": Array [
+        Object {
+          "block": Array [
+            AST {
+              "source": Object {
+                "endCol": 4,
+                "endLine": 1,
+                "startCol": 2,
+                "startLine": 1,
+              },
+              "tokenOptions": Object {
+                "blocks": Array [
+                  Object {
+                    "block": Array [],
+                    "name": "default",
+                  },
+                ],
+                "functionName": "abc",
+                "parameters": Array [],
+              },
+              "type": "FUNCTION_CALL",
+            },
+          ],
+          "name": "default",
         },
       ],
       "functionName": "abc",
@@ -310,77 +330,92 @@ Array [
       "startLine": 0,
     },
     "tokenOptions": Object {
-      "block": Array [
-        AST {
-          "source": Object {
-            "endCol": 10,
-            "endLine": 1,
-            "startCol": 7,
-            "startLine": 1,
-          },
-          "tokenOptions": Object {
-            "block": Array [
-              AST {
-                "source": Object {
-                  "endCol": 12,
-                  "endLine": 2,
-                  "startCol": 9,
-                  "startLine": 2,
-                },
-                "tokenOptions": Object {
-                  "block": Array [
-                    AST {
-                      "source": Object {
-                        "endCol": 14,
-                        "endLine": 3,
-                        "startCol": 11,
-                        "startLine": 3,
-                      },
-                      "tokenOptions": Object {
-                        "block": Array [],
-                        "functionName": "abc",
-                        "parameters": Array [],
-                      },
-                      "type": "FUNCTION_CALL",
-                    },
-                  ],
-                  "functionName": "def",
-                  "parameters": Array [
-                    AST {
-                      "source": Object {
-                        "endCol": 14,
-                        "endLine": 2,
-                        "startCol": 13,
-                        "startLine": 2,
-                      },
-                      "tokenOptions": Object {
-                        "type": "NUMBER",
-                        "value": 1,
-                      },
-                      "type": "VALUE_LITERAL",
-                    },
-                    AST {
-                      "source": Object {
-                        "endCol": 16,
-                        "endLine": 2,
-                        "startCol": 15,
-                        "startLine": 2,
-                      },
-                      "tokenOptions": Object {
-                        "type": "NUMBER",
-                        "value": 2,
-                      },
-                      "type": "VALUE_LITERAL",
-                    },
-                  ],
-                },
-                "type": "FUNCTION_CALL",
+      "blocks": Array [
+        Object {
+          "block": Array [
+            AST {
+              "source": Object {
+                "endCol": 10,
+                "endLine": 1,
+                "startCol": 7,
+                "startLine": 1,
               },
-            ],
-            "functionName": "abc",
-            "parameters": Array [],
-          },
-          "type": "FUNCTION_CALL",
+              "tokenOptions": Object {
+                "blocks": Array [
+                  Object {
+                    "block": Array [
+                      AST {
+                        "source": Object {
+                          "endCol": 12,
+                          "endLine": 2,
+                          "startCol": 9,
+                          "startLine": 2,
+                        },
+                        "tokenOptions": Object {
+                          "blocks": Array [
+                            Object {
+                              "block": Array [
+                                AST {
+                                  "source": Object {
+                                    "endCol": 14,
+                                    "endLine": 3,
+                                    "startCol": 11,
+                                    "startLine": 3,
+                                  },
+                                  "tokenOptions": Object {
+                                    "blocks": Array [],
+                                    "functionName": "abc",
+                                    "parameters": Array [],
+                                  },
+                                  "type": "FUNCTION_CALL",
+                                },
+                              ],
+                              "name": "default",
+                            },
+                          ],
+                          "functionName": "def",
+                          "parameters": Array [
+                            AST {
+                              "source": Object {
+                                "endCol": 14,
+                                "endLine": 2,
+                                "startCol": 13,
+                                "startLine": 2,
+                              },
+                              "tokenOptions": Object {
+                                "type": "NUMBER",
+                                "value": 1,
+                              },
+                              "type": "VALUE_LITERAL",
+                            },
+                            AST {
+                              "source": Object {
+                                "endCol": 16,
+                                "endLine": 2,
+                                "startCol": 15,
+                                "startLine": 2,
+                              },
+                              "tokenOptions": Object {
+                                "type": "NUMBER",
+                                "value": 2,
+                              },
+                              "type": "VALUE_LITERAL",
+                            },
+                          ],
+                        },
+                        "type": "FUNCTION_CALL",
+                      },
+                    ],
+                    "name": "default",
+                  },
+                ],
+                "functionName": "abc",
+                "parameters": Array [],
+              },
+              "type": "FUNCTION_CALL",
+            },
+          ],
+          "name": "default",
         },
       ],
       "functionName": "abc",

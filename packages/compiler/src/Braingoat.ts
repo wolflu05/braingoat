@@ -19,7 +19,9 @@ export class Braingoat {
 
   compile() {
     const tokens = Tokenizer.tokenize(this.code);
+    console.log(tokens);
     const ast = AST.parse(tokens, this);
+    console.log(ast);
     const emitter = new Emitter(ast, this).emit();
     this.bfCode = emitter.code;
 
