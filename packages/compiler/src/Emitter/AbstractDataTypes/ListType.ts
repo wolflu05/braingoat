@@ -9,6 +9,7 @@ export type listIndexType = Int | number;
 export abstract class ListType extends BasicDataType {
   length: number | any;
   array: BasicDataType[];
+  base: typeof BasicDataType = BasicDataType;
 
   constructor(
     emitter: Emitter,

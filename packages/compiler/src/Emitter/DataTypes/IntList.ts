@@ -22,6 +22,7 @@ export class IntList extends ListType {
     super(emitter, name, variableOptions, source, addToMemory, position);
     this.array = [];
     this.tmpCells = [];
+    this.base = Int;
 
     this.allocate(addToMemory, position);
   }
@@ -156,5 +157,11 @@ export class IntList extends ListType {
       ${".>".repeat(this.length)}
       ${"<".repeat(this.length)}
     `;
+  }
+
+  printN() {
+    for (const variable of this.array) {
+      variable.printN();
+    }
   }
 }

@@ -3,7 +3,6 @@ import { AST, blockType, TOKEN_TYPES, VARIABLE_LITERAL_OPTIONS } from "../../AST
 import { Emitter } from "..";
 import { LineType } from "../../Tokenizer";
 import { Int } from "../DataTypes/Int";
-import { NumberType } from "../AbstractDataTypes/NumberType";
 
 export const printN = (emitter: Emitter, args: AST[], blocks: blockType[], source: LineType) => {
   if (blocks.length !== 0) {
@@ -23,14 +22,6 @@ export const printN = (emitter: Emitter, args: AST[], blocks: blockType[], sourc
     const parameterVar = emitter.getVariable(tokenOptions.name, args[0].source);
 
     if (parameterVar && !tokenOptions.index) {
-      if (!(parameterVar instanceof NumberType)) {
-        emitter.braingoat.throwError(
-          ErrorType.CompileError,
-          `printN expected NumberType, got ${parameterVar.constructor.name}`,
-          args[0].source,
-        );
-      }
-
       return parameterVar.printN();
     }
   }
