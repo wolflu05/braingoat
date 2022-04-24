@@ -71,4 +71,16 @@ export abstract class BasicDataType {
   print() {
     this.throwNotImplemented("print");
   }
+
+  printN() {
+    this.throwNotImplemented("printN");
+  }
+
+  input() {
+    this.throwNotImplemented("input");
+  }
+
+  inputN() {
+    this.throwNotImplemented("inputN");
+  }
 }

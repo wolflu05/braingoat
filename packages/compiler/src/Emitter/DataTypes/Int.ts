@@ -88,6 +88,33 @@ export class Int extends NumberType {
     });
   }
 
+  input() {
+    this.emitter.codeBuilder`${this},`;
+  }
+
+  inputN() {
+    this.emitter.withIntArray(4, this.source, ([x]) => {
+      this.emitter.codeBuilder`
+        ${x} [-]>[-]+
+        [[-]
+        >[-],
+            [
+                +[
+                    -----------[
+                        >[-]++++++[<------>-]
+                        <--<<[->>++++++++++<<]
+                        >>[-<<+>>]
+                    <+>]
+                ]
+            ]
+        <]
+        <
+      `;
+
+      this.set(x);
+    });
+  }
+
   // math operations
   add(variable: Int) {
     const tmp = variable.clone();
