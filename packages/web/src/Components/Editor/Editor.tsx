@@ -17,6 +17,7 @@ export interface EditorProps {
 export interface EditorHandle {
   setError(error: any): void;
   clearError(): void;
+  setValue(value: string): void;
 }
 
 const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange, defaultValue }, ref) => {
@@ -58,6 +59,9 @@ const Editor = forwardRef<EditorHandle, EditorProps>(({ onChange, defaultValue }
     clearError() {
       if (!monacoRef.current || !modelRef.current) return;
       monacoRef.current.editor.setModelMarkers(modelRef.current, "braingoat", []);
+    },
+    setValue(value: string) {
+      editorRef.current?.setValue(value);
     },
   }));
 

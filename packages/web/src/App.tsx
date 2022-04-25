@@ -5,6 +5,7 @@ import Layout from "./Components/Layout/Layout";
 import { Braingoat } from "@braingoat/compiler";
 import useDebounce from "./hooks/useDebounce";
 import { TESTING_CODE } from "./Components/Editor/language";
+import { ExampleSelector } from "./Components/ExampleSelector/ExampleSelector";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -76,6 +77,7 @@ function App() {
 
   return (
     <Layout>
+      <ExampleSelector editor={editor} />
       <Editor onChange={handleChange} ref={editor} defaultValue={editorValue} />
       <div>
         <button onClick={handleCompile}>Compile</button>
