@@ -51,8 +51,8 @@ jobs:
           name: react-build
           path: packages/web/dist/
 
-  deploy:
-    name: deploy 🚀
+  deploy-page:
+    name: deploy web 🚀
     runs-on: ubuntu-latest
     needs: [build]
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -89,3 +89,35 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@13b55b33dd8996121833dbc1db458c793a334630
+
+  deploy-npm:
+    name: deploy npm 🚀
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    concurrency:
+      group: "npm"
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65
+        with:
+          node-version: "20"
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@wolflu05'
+      - run: npm ci
+      - run: npm build
+      - id: check
+        run: |
+          version=$(node -e "const fs = require('fs'); const path = require('path'); const p = path.resolve('packages', 'compiler', 'package.json'); const currentPackageJSON = fs.readFileSync(p , {encoding: 'utf-8'}); fs.writeFileSync(p, currentPackageJSON.replace('@braingoat/compiler', '@wolflu05/braingoat'), {encoding: 'utf-8'}); console.log(JSON.parse(currentPackageJSON).version)")
+          if [[ $(npm search wolflu05/braingoat@$version) == *"No matches"* ]]; then
+            echo "publish=true" >> $GITHUB_OUTPUT
+          fi
+      - run: npm publish -w @wolflu05/braingoat
+        if: ${{ steps.check.outputs.publish }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
