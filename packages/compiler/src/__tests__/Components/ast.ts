@@ -1,6 +1,6 @@
-import { Braingoat } from "../../src/Braingoat";
-import { AST } from "../../src/AST";
-import { TokenType } from "../../src/Tokenizer";
+import { Braingoat } from "../../Braingoat";
+import { AST } from "../../AST";
+import { TokenType } from "../../Tokenizer";
 
 const astCases: Array<[string, TokenType[], string, boolean]> = [
   ["empty token list", [], "", true],

@@ -50,7 +50,7 @@ function App() {
   }, []);
 
   const handleCompile = useCallback(() => {
-    const braingoat = new Braingoat(editorValue);
+    const braingoat = new Braingoat(editorValue, { debug: true });
     console.log(braingoat);
     try {
       braingoat.compile();

@@ -59,13 +59,13 @@ export type EXPRESSION_OPTIONS = {
 
 export type VALUE_LITERAL_OPTIONS =
   | {
-      type: "NUMBER";
-      value: number;
-    }
+    type: "NUMBER";
+    value: number;
+  }
   | {
-      type: "LIST";
-      value: AST[];
-    };
+    type: "LIST";
+    value: AST[];
+  };
 export type VARIABLE_LITERAL_OPTIONS = {
   name: string;
   index: AST | null;
@@ -107,7 +107,7 @@ export class AST {
       const stack = [];
       let k = startIndex;
 
-      for (; k < tokens.length; ) {
+      for (; k < tokens.length;) {
         let nextIndex = k + 1;
         if (stack.length === 1) {
           let endingIdx = k;
@@ -234,7 +234,7 @@ export class AST {
   static parse(tokens: TokenType[], braingoat: Braingoat) {
     const tree: AST[] = [];
 
-    for (let i = 0; i < tokens.length; ) {
+    for (let i = 0; i < tokens.length;) {
       let nextIndex = i;
 
       // COMMENTS
@@ -245,7 +245,7 @@ export class AST {
         }
         nextIndex = endingIndex + 1;
 
-        console.log(
+        braingoat.log(
           tokens.map((x) => x.value),
           nextIndex,
         );

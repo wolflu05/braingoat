@@ -2,9 +2,10 @@
   "name": "@braingoat/compiler",
   "version": "0.1.0",
   "description": "The braingoat to bf compiler",
-  "main": "src/Braingoat.ts",
+  "main": "dist/Braingoat.js",
   "scripts": {
-    "dev": "ts-node src/index.ts",
+    "dev": "tsc --watch",
+    "build": "tsc",
     "test": "jest"
   },
   "author": "wolflu05",

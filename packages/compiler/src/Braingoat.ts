@@ -8,20 +8,26 @@ export enum ErrorType {
   CompileError = "CompileError",
 }
 
+export interface BraingoatOptions {
+  debug?: boolean;
+}
+
 export class Braingoat {
   code: string[];
   bfCode: string;
+  debug: boolean;
 
-  constructor(code: string) {
+  constructor(code: string, options: BraingoatOptions = {}) {
     this.code = code.split("\n");
     this.bfCode = "";
+    this.debug = options.debug ?? false;
   }
 
   compile() {
     const tokens = Tokenizer.tokenize(this.code);
-    console.log(tokens);
+    this.log("TOKENS", tokens);
     const ast = AST.parse(tokens, this);
-    console.log(ast);
+    this.log("AST", ast);
     const emitter = new Emitter(ast, this).emit();
     this.bfCode = emitter.code;
 
@@ -40,9 +46,8 @@ export class Braingoat {
     let stack = "";
     stack += `${this.code[source.startLine - 2] || ""}\n`;
     stack += `${this.code[source.startLine - 1] || ""}\n`;
-    stack += `${" ".repeat(source.startCol)}${"^".repeat(source.endCol - source.startCol)} L${source.startLine}:${
-      source.startCol
-    }-${source.endCol}\n`;
+    stack += `${" ".repeat(source.startCol)}${"^".repeat(source.endCol - source.startCol)} L${source.startLine}:${source.startCol
+      }-${source.endCol}\n`;
     stack += `${" ".repeat(source.startCol)}${type}: ${message}`;
 
     if (type == ErrorType.SyntaxError) {
@@ -56,5 +61,11 @@ export class Braingoat {
     }
 
     throw new Error(stack);
+  }
+
+  log(...args: any[]): void {
+    if (this.debug) {
+      console.log(...args)
+    }
   }
 }

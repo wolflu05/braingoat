@@ -8,7 +8,7 @@ try {
   k[(a + b)] = 42
 
   print(k[(a+(b-1))])
-  `).compile();
+  `, { debug: true }).compile();
   // k[1] = 5
   // b = (a + b)
   // Int a = (1 + (i * j)  )
