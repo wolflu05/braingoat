@@ -6,6 +6,7 @@ import { Braingoat } from "@braingoat/compiler";
 import useDebounce from "./hooks/useDebounce";
 import { TESTING_CODE } from "./Components/Editor/language";
 import { ExampleSelector } from "./Components/ExampleSelector/ExampleSelector";
+import { base64ToString, strToBase64 } from "./utils";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -19,7 +20,7 @@ function App() {
     // url hash param
     if (window.location.hash) {
       const encoded = window.location.href.split("#")[1];
-      const code = Buffer.from(decodeURIComponent(encoded), "base64").toString("utf-8");
+      const code = base64ToString(decodeURIComponent(encoded));
       setEditorValue(code);
     }
 
@@ -28,7 +29,7 @@ function App() {
       const code = localStorage.getItem("code");
 
       if (code) {
-        setEditorValue(Buffer.from(code, "base64").toString("utf-8"));
+        setEditorValue(base64ToString(code));
       } else {
         setEditorValue(TESTING_CODE);
       }
@@ -39,7 +40,7 @@ function App() {
 
   useEffect(() => {
     if (debouncedEditorValue) {
-      localStorage.setItem("code", Buffer.from(debouncedEditorValue, "utf-8").toString("base64"));
+      localStorage.setItem("code", strToBase64(debouncedEditorValue));
     }
   }, [debouncedEditorValue]);
 
@@ -56,6 +57,7 @@ function App() {
       braingoat.compile();
       setCompiledCode(braingoat.bfCode);
       editor.current?.clearError();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       editor.current?.setError(error);
       setCompiledCode(error?.stack || error);
@@ -64,7 +66,7 @@ function App() {
 
   const handleShare = useCallback(() => {
     const baseUrl = window.location.href.split("#")[0];
-    const encoded = encodeURIComponent(Buffer.from(editorValue, "utf-8").toString("base64"));
+    const encoded = encodeURIComponent(strToBase64(editorValue));
 
     navigator.clipboard.writeText(`${baseUrl}#${encoded}`);
     setMessage("Copied to clipboard");

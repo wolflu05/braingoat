@@ -7,7 +7,7 @@ import { listIndexType, ListType } from "../AbstractDataTypes/ListType";
 
 const TMP_CELLS = 4;
 export class IntList extends ListType {
-  length: number | any;
+  declare length: number | any;
   array: Int[];
   tmpCells: Int[];
 
