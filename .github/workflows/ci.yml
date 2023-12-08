@@ -126,7 +126,7 @@ jobs:
             echo "publish=true" >> $GITHUB_OUTPUT
           fi
       - name: Publish to gh npm pkg registry
-        run: npm publish -w @wolflu05/braingoat
+        run: npm publish -w @wolflu05/braingoat || true
         if: ${{ steps.check.outputs.publish }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
