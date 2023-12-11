@@ -37,6 +37,10 @@ export abstract class BasicDataType {
     return this.name;
   }
 
+  toRef() {
+    return `<${this.constructor.name}: ${this.toString()}>`
+  }
+
   throwNotImplemented(name: string): never {
     this.emitter.braingoat.throwError(
       ErrorType.CompileError,

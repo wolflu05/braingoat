@@ -176,7 +176,7 @@ export class Emitter {
       else {
         this.braingoat.throwError(
           ErrorType.CompileError,
-          `cannot assign expression result to ${typeof variable}`,
+          `cannot assign expression result to ${variable.toRef()}`,
           expression.source,
         );
       }
